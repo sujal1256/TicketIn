@@ -4,6 +4,8 @@ import { connectToMongoDB } from "./utils/connectMongoDB.util.js";
 import User from "./models/user.model.js";
 import { ApiError } from "./utils/ApiError.util.js";
 import { userRouter } from "./routes/user.route.js";
+import cookieParser from "cookie-parser";
+import { verifyJWT } from "./middlewares/auth.middleware.js";
 dotenv.config();
 
 const app = express();
@@ -24,10 +26,14 @@ connectToMongoDB()
 
 // middleware
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 // routes
-app.get("/", (req, res) => res.send("Home page"));
+app.get("/", verifyJWT, (req, res) => res.send("Home page"));
+app.get('/checkJWT', verifyJWT, (req, res)=>{
+  res.send("checking JWT")
+})
 app.use("/api/v1/user", userRouter);
 
 app.listen(PORT, () => {

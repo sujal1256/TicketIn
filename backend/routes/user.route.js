@@ -1,12 +1,17 @@
 import express from "express";
-import { createUserAfterSignup } from "../cotrollers/user.controller.js";
+import { handleUserRegister, handleUserSignin } from "../controllers/user.controller.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const userRouter = express.Router();
 
 userRouter
   .route("/register")
   .get((req, res) => res.send("Signup"))
-  .post(createUserAfterSignup);
+  .post(handleUserRegister);
+
+userRouter.route('/signin').get((req, res) => req.send('Signin')).post(handleUserSignin)
+
+
 
 export { userRouter };
- 
+   
