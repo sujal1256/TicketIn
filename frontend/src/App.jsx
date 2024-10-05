@@ -1,15 +1,40 @@
-// import Navbar from "./Homepage/Navbar";
-// import Sidebar from "./Homepage/Sidebar";
-// import Mainpage from "./Homepage/Mainpage";
+import Navbar from "./Homepage/Navbar";
+import Body from "./Homepage/Body";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import Signin from "./Signin";
+import Signup from "./Signup";
 
-function App() {
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <Body />,
+      },
+      {
+        path: "/signin",
+        element: <Signin />,
+      },
+      {
+        path: "signup",
+        element: <Signup />,
+      },
+    ],
+  },
+]);
+
+function Layout() {
   return (
     <>
-      <div className="h-10 w-full bg-black">
-      </div>
-      <p>Hello</p>
+      <Navbar />
+      <Outlet />
     </>
   );
+}
+function App() {
+  return <RouterProvider router={router} />;
 }
 
 export default App;
