@@ -12,13 +12,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.get("/", (req, res) => {
-  res.send("Home page");
-});
-
 // Connecting to MongoDb
 connectToMongoDB()
-  .then((mongo) => {
+  .then(() => {
     console.log(`MongoDB connected successfully\n`);
   })
   .catch((err) => {
@@ -32,10 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // routes
-app.get("/", verifyJWT, (req, res) => res.send("Home page"));
-app.get('/checkJWT', verifyJWT, (req, res)=>{
-  res.send("checking JWT")
-})
+
 app.use("/api/v1/user", userRouter);
 
 app.listen(PORT, () => {

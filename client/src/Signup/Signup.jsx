@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from 'axios'
 
 function Signup() {
@@ -7,12 +7,13 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userRole, setUserRole] = useState("User");
+
+  const [userFromBackend, setUserFromBackend] = useState(null);
   const backendURL = "http://localhost:5500";
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try{
       const createdUser = await axios.post(`/api/v1/user/signup`,{
         username, email, password, userRole
@@ -25,9 +26,24 @@ function Signup() {
       
     }
 
-    // Add signup logic here
   };
 
+  useEffect(()=>{
+    async function getUser(){
+      const user = await axios.get('/api/v1/user/signup'); 
+      setUserFromBackend(user);
+    }
+    try {
+      getUser();
+
+    } catch (error) {
+      console.log(error);
+      
+    }
+  },[])
+
+  console.log("user from backend", userFromBackend);
+  
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-8 bg-white shadow-lg rounded-lg">

@@ -15,15 +15,16 @@ function Signin() {
         password, email
       });
       console.log(userloggedIn);
-      
     }
+    
     catch(error){
-      console.error("Error occurred in signin in", error);
+      console.log("Error occurred in signin in", error);
       
     }
     // Add authentication logic here
   };
-
+  
+  console.log("cookie", document.cookie)
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-8 bg-white shadow-lg rounded-lg">

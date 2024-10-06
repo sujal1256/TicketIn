@@ -6,34 +6,39 @@ const verifyJWT = async function(req, res, next){
     try {
         console.log('verifying the user');
         
-        const token = req.cookies.accessToken;
-        console.log(req.cookies);
+        const token = req.cookies?.accessToken;
+
+        console.log(token);
         
         if(!token){
-            throw new ApiError(400, 'access token not found');
+            console.log("token is not found");
+            
+            return res.status(400).json(new ApiError(401, "Unable to verify the token"));
         } 
         
         const decodedToken = await jwt.verify(token, process.env.ACESS_TOKEN_SECRET_KEY);
+        console.log("decoded token", decodedToken);
         
         if(!decodedToken) {
-            throw new ApiError(401, "Unable to verify the token");
+            console.log("token expired");
+            return res.status(400).json(new ApiError(401, "Unable to verify the token"));
         }
-        console.log(decodedToken);
         
         const id = decodedToken?._id;
     
-        const user = await User.findOne({_id: id});
+        const user = await User.findOne({_id: id}).select("-password -createdAt -updatedAt -_id -_v");
     
         console.log('user', user);
 
         req.user = user;
         next(); 
     } catch (error) {
-        throw new ApiError(400, `Error in verifying the JWT\n ${error.message}`);
+        // return res.status(500).json(new ApiError(500, `Error verifying JWT: ${error.message}`));
+        return res.status(500).json(new ApiError(500, `Error verifying JWT: ${error.message}`));
         
     }
     
 
 }
 
-export {verifyJWT};
+export {verifyJWT}; 

@@ -47,22 +47,28 @@ async function handleUserSignin(req, res) {
   
     // check if any value is undefined
     if ([email, password].some((e) => e == undefined)) {
-      throw new ApiError(400, "Values while signing in the user are undefined");
+      return res.status(400).json(new ApiError(401, "Values while signing in the user are undefined"));
     }
   
     const user = await User.findOne({ email });
     if (!user) {
-      throw new ApiError(400, "User not found");
+      return res.status(400).json(new ApiError(401, "User not found"));
     }
   
     const checkPassword = await user.isPasswordCorrect(password);
   
     if (!checkPassword) {
-      throw new ApiError(400, "Incorrect password");
+      return res.status(400).json(new ApiError(401, "Incorrect Password"));
     }
-  
+    
     // Make a JWT token and pass it to cookies
     const token = await user.generateAccessToken();
+
+    // we donot want to send password to the frontend
+    
+    const userToSend = user.toObject();
+    delete userToSend.password;
+    
   
     console.log("Signin successfull");
     
@@ -70,8 +76,9 @@ async function handleUserSignin(req, res) {
       .status(200)
       .cookie("accessToken", token, {
         httpOnly: true,
+        secure: true
       })
-      .json(new ApiResponse(200, user, "Signin successfull"));    
+    .json(new ApiResponse(200, userToSend, "Signin successfull"));    
   } catch (error) {
     console.log(`Error occurred while signin In\n`);
     
