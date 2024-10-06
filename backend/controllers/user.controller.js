@@ -31,6 +31,8 @@ async function handleUserRegister(req, res) {
 
   const createdUser = await User.findById(user._id).select("-password");
 
+  console.log('User registered successfully');
+  
   res
     .status(200)
     .json(new ApiResponse(200, createdUser, "User created successfully"));
@@ -61,8 +63,9 @@ async function handleUserSignin(req, res) {
   
     // Make a JWT token and pass it to cookies
     const token = await user.generateAccessToken();
-    console.log(token);
   
+    console.log("Signin successfull");
+    
     res
       .status(200)
       .cookie("accessToken", token, {

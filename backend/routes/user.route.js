@@ -5,7 +5,7 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 const userRouter = express.Router();
 
 userRouter
-  .route("/register")
+  .route("/signup") 
   .get((req, res) => res.send("Signup"))
   .post(handleUserRegister);
 

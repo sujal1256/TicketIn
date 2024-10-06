@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import { connectToMongoDB } from "./utils/connectMongoDB.util.js";
+import cors from 'cors'
 import User from "./models/user.model.js";
 import { ApiError } from "./utils/ApiError.util.js";
 import { userRouter } from "./routes/user.route.js";
@@ -26,6 +27,7 @@ connectToMongoDB()
 
 // middleware
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
@@ -41,13 +43,3 @@ app.listen(PORT, () => {
     `Backend is being served on \n\x1b[36mhttp://localhost:${PORT}\x1b[0m \n`
   );
 });
-
-// testing user methods
-// const user = await User.create({
-//     username:"sujalmalhotra",
-//     email:"sujal2@gmail.com",
-//     password: "pass1243"
-// })
-
-// user.isPasswordCorrect('pass123').then(res => console.log(res)
-// )
