@@ -56,7 +56,7 @@ userSchema.methods.generateAccessToken = async function () {
       email: this.email,
     },
     process.env.ACESS_TOKEN_SECRET_KEY,
-    { expiresIn: "10s" }
+    { expiresIn: "10h" }
   );
 };
 

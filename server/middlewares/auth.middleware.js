@@ -26,7 +26,7 @@ const verifyJWT = async function(req, res, next){
         
         const id = decodedToken?._id;
     
-        const user = await User.findOne({_id: id}).select("-password -createdAt -updatedAt -_id -_v");
+        const user = await User.findOne({_id: id}).select("-password -createdAt -updatedAt -__v");
     
         console.log('user', user);
 

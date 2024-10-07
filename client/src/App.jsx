@@ -3,6 +3,7 @@ import Body from "./Homepage/Body";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import Signin from "./Signin/Signin.jsx";
 import Signup from "./Signup/Signup.jsx";
+import CreateProject from "./Project/CreateProject.jsx";
 
 const router = createBrowserRouter([
   {
@@ -14,13 +15,17 @@ const router = createBrowserRouter([
         element: <Body />,
       },
       {
-        path: "/signin",
+        path: "signin",
         element: <Signin />,
       },
       {
         path: "signup",
         element: <Signup />,
       },
+      {
+        path: "create-project",
+        element: <CreateProject />
+      }
     ],
   },
 ]);
