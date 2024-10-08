@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from 'axios'
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Signup() {
   // State for username, email, password, and user role
@@ -8,44 +10,28 @@ function Signup() {
   const [password, setPassword] = useState("");
   const [userRole, setUserRole] = useState("User");
 
-  const [userFromBackend, setUserFromBackend] = useState(null);
-  const backendURL = "http://localhost:5500";
-
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
-      const createdUser = await axios.post(`/api/v1/user/signup`,{
-        username, email, password, userRole
-      });
-      console.log(createdUser);
-      
-    }
-    catch(error){
-      console.error("Error occurred in signing up", error);
-      
-    }
 
+    try {
+      const createdUser = await axios.post(`/api/v1/user/signup`, {
+        username,
+        email,
+        password,
+        userRole,
+      });
+      toast.success("Signin successfull");
+      console.log(createdUser);
+    } catch (error) {
+      toast.error(error.message);
+      console.error("Error occurred in signing up", error);
+    }
   };
 
-  useEffect(()=>{
-    async function getUser(){
-      const user = await axios.get('/api/v1/user/signup'); 
-      setUserFromBackend(user);
-    }
-    try {
-      getUser();
-
-    } catch (error) {
-      console.log(error);
-      
-    }
-  },[])
-
-  console.log("user from backend", userFromBackend);
-  
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
+      <ToastContainer />
       <div className="w-full max-w-md p-8 space-y-8 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-bold text-center text-gray-900">
           Sign Up

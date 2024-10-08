@@ -59,12 +59,33 @@ async function handleProjectCreation(req, res) {
   }
 }
 
+async function handleGetProjects(req, res) {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(400).json(new ApiError(401, "User not found"));
+    }
+
+    const userId = user.id;
+    console.log("userId", userId);
+
+    const projects = await Project.find({ projectOwner: userId });
+    console.log(projects);
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, projects, "Projects created by user"));
+  } catch (error) {
+    console.log("Error in getting projects", error.message);
+  }
+}
+
 // async function handleAddMemberToProject(req, res) {
 //   // Get the email from body
 //   // Check if email is ok
 //   // Get user based on email
 //   // Check if user is valid
-//   // 
+//   //
 // }
 
-export { handleProjectCreation };
+export { handleProjectCreation, handleGetProjects };

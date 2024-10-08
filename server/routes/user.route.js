@@ -18,7 +18,7 @@ userRouter.get("/", verifyJWT, (req, res) =>
 
 userRouter
   .route("/signup")
-  .get(verifyJWT, (req, res) =>
+  .get((req, res) =>
     res
       .status(200)
       .json(

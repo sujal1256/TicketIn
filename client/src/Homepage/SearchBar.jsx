@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 
 function SearchBar() {
     const [searchText, setSearchText] = useState("");
-    console.log(searchText);
     
   return (
     <>

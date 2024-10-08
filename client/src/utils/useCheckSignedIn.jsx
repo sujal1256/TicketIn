@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 function useCheckSignedIn() {
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [loggedInResponse, setLoggedInResponse] = useState({
+    userLoggedIn: false,
+    user: null,
+  });
 
   useEffect(() => {
     async function checkUserIfSignedInOrNot() {
@@ -10,7 +13,10 @@ function useCheckSignedIn() {
         console.log(error);
         return error;
       });
-      setUserLoggedIn(response.status >= 200 && response.status < 300);
+      setLoggedInResponse({
+        userLoggedIn: response.status >= 200 && response.status < 300,
+        user: response,
+      });
     }
     try {
       checkUserIfSignedInOrNot();
@@ -19,8 +25,7 @@ function useCheckSignedIn() {
     }
   }, []);
 
-  return [userLoggedIn, setUserLoggedIn];
+  return loggedInResponse;
 }
- 
+
 export default useCheckSignedIn;
- 
