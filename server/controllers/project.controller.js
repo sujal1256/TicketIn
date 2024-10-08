@@ -59,4 +59,12 @@ async function handleProjectCreation(req, res) {
   }
 }
 
+// async function handleAddMemberToProject(req, res) {
+//   // Get the email from body
+//   // Check if email is ok
+//   // Get user based on email
+//   // Check if user is valid
+//   // 
+// }
+
 export { handleProjectCreation };
