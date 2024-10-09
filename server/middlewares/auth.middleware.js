@@ -8,7 +8,6 @@ const verifyJWT = async function(req, res, next){
         
         const token = req.cookies?.accessToken;
 
-        console.log(token);
         
         if(!token){
             console.log("token is not found");
@@ -17,7 +16,6 @@ const verifyJWT = async function(req, res, next){
         } 
         
         const decodedToken = await jwt.verify(token, process.env.ACESS_TOKEN_SECRET_KEY);
-        console.log("decoded token", decodedToken);
         
         if(!decodedToken) {
             console.log("token expired");
@@ -28,8 +26,6 @@ const verifyJWT = async function(req, res, next){
     
         const user = await User.findOne({_id: id}).select("-password -createdAt -updatedAt -__v");
     
-        console.log('user', user);
-
         req.user = user;
         next(); 
     } catch (error) {

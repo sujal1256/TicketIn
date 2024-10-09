@@ -4,6 +4,7 @@ import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import Signin from "./Signin/Signin.jsx";
 import Signup from "./Signup/Signup.jsx";
 import CreateProject from "./Project/CreateProject.jsx";
+import ProjectPage from "./Project/ProjectPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -24,8 +25,12 @@ const router = createBrowserRouter([
       },
       {
         path: "create-project",
-        element: <CreateProject />
-      }
+        element: <CreateProject />,
+      },
+      {
+        path: "project",
+        element: <ProjectPage />
+      },
     ],
   },
 ]);

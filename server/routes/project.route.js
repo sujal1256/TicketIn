@@ -1,12 +1,17 @@
 import { Router } from "express";
-import { handleGetProjects, handleProjectCreation } from "../controllers/project.controller.js";
-import Project from "../models/project.model.js";
-import { ApiResponse } from "../utils/ApiResponse.util.js";
+import {
+  handleGetProjectDetails,
+  handleGetProjects,
+  handleProjectCreation,
+} from "../controllers/project.controller.js";
+
 
 const projectRouter = Router();
 
 projectRouter.route("/create-project").post(handleProjectCreation);
 
 projectRouter.route("/").get(handleGetProjects);
+
+projectRouter.route("/get-project-details").get(handleGetProjectDetails);
 
 export { projectRouter };

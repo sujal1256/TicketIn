@@ -1,4 +1,5 @@
 import express from 'express';
+import { handleIssueCreation } from '../controllers/issue.controller';
 
 const issueRouter = express.Router();
 
