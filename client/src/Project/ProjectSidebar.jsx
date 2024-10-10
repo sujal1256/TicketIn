@@ -4,14 +4,14 @@ import { GoProject } from "react-icons/go";
 function ProjectSidebar({ details }) {
   console.log(details);
   const styleString =
-    "bg-red-100 w-full flex items-center gap-2 p-2 rounded-lg flex w-48 overflow-hidden";
+    "bg-red-100 w-full flex items-center gap-2 p-2 rounded-lg flex overflow-hidden";
   return (
     <div className="border-r-2 p-10 pr-1 pl-5 flex flex-col items-start justify-start gap-7">
       <div className={styleString}>
-        <GoProject className="size-6" />
+        <GoProject className="text-xl bg-black" />
         <div className="flex flex-col shrink-0 ">
           <p>{details?.projectDetails?.projectName}</p>
-          <p className="text-gray-500 text-sm">Software Proect</p>
+          <p className="text-gray-500 text-sm">Software Project</p>
         </div>
       </div>
 
