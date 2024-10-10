@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import ProjectSidebar from "./ProjectSidebar";
+import ProjectBoard from "./ProjectBoard";
 
 function ProjectPage() {
   const [searchParams] = useSearchParams();
@@ -29,11 +31,9 @@ function ProjectPage() {
     return;
   }
   return (
-    <div>
-      <h1>{details?.projectDetails?.projectName}</h1>
-      <h1>{details?.projectDetails?.projectDescription}</h1>
-      <h1>{details?.projectOwner?.username}</h1>
-      <h1>{details?.projectOwner?.email}</h1>
+    <div className="flex">
+      <ProjectSidebar details = {details}/>
+      <ProjectBoard details = {details}/>
     </div>
   );
 }

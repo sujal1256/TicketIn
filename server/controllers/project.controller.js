@@ -81,6 +81,7 @@ async function handleGetProjects(req, res) {
 
 async function handleGetProjectDetails(req, res) {
   try {
+    // creats a map of serch queries
     const projectId = new URLSearchParams(
       req.url.slice(req.url.lastIndexOf("?"))
     ).get("q");
