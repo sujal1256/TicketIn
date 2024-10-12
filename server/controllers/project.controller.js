@@ -42,8 +42,9 @@ async function handleProjectCreation(req, res) {
       members: [
         {
           userId: projectOwner._id,
-          userName: projectOwner.userame,
+          userName: projectOwner.username,
           userRole: "Admin",
+          userEmail: projectOwner.email,
         },
       ],
     });
@@ -115,12 +116,64 @@ async function handleGetProjectDetails(req, res) {
   }
 }
 
-// async function handleAddMemberToProject(req, res) {
-//   // Get the email from body
-//   // Check if email is ok
-//   // Get user based on email
-//   // Check if user is valid
-//   //
-// }
+async function handleAddUserToProject(req, res) {
+  // Get the email from body
+  // Check if email is ok
+  // Get user based on email
+  // Check if user is valid
+  const { projectID, email } = req.body;
 
-export { handleProjectCreation, handleGetProjects, handleGetProjectDetails };
+  if (!projectID || !email) {
+    return res.status(400).json(new ApiError(400, "Values are not valid"));
+  }
+
+  const project = await Project.findOne({ _id: projectID });
+
+  //  get the user if the user exists add the user to members of the project if the user does not exist then create a user and then add it
+  // FIXME: As we will be sending a confirmation mail while adding the user so the person will signup first after clicking on confirmation link
+
+  let user = await User.findOne({ email });
+
+  // console.log("user1", user);
+
+  // console.log("email", email);
+
+  if (!user) {
+    user = await User.create({
+      username: "Default",
+      email: email,
+      password: "123",
+    });
+  }
+
+  // console.log("user2", user);
+  let alreadyExists = true;
+  project.members.forEach((e) => {
+    // console.log(e.userEmail, email);
+    if (e.userEmail == email) {
+      alreadyExists = false;
+    }
+  });
+
+  if (!alreadyExists) {
+    return res.status(400).json(new ApiError(400, "User is already added in the project"));
+  }
+  await project.members.push({
+    userName: user.username,
+    userId: user._id,
+    userRole: user.userRole,
+    userEmail: email,
+  });
+
+  await project.save();
+  return res
+    .status(200)
+    .json(new ApiResponse(200, project, "Member Added successfully"));
+}
+
+export {
+  handleProjectCreation,
+  handleGetProjects,
+  handleGetProjectDetails,
+  handleAddUserToProject,
+};

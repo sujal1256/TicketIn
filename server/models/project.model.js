@@ -11,10 +11,14 @@ const memberSchema = {
     default: "User",
     enum: ["User", "Admin"],
   },
+  userEmail: {
+    type: String,
+    required: true,
+  },
   userName: {
     type: String,
-    required: false
-  }
+    required: false,
+  },
 };
 
 const projectSchema = new mongoose.Schema(
