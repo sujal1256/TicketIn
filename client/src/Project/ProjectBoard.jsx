@@ -4,7 +4,7 @@ import BoardSearchBar from "./BoardSearchBar";
 import { FaUserPlus } from "react-icons/fa";
 import { IoIosSettings } from "react-icons/io";
 import BoardTasks from "./BoardTasks";
-import AddUserMenu from "./addUserMenu";
+import AddUserMenu from "./AddUserMenu.jsx";
 import UserComponent from "./UserComponent";
 
 function ProjectBoard({ details }) {

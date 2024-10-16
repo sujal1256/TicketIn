@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import { useSearchParams } from "react-router-dom";
 
 function AddUserMenu() {
   const [email, setEmail] = useState("");
+  const [searchParams] = useSearchParams();
 
   const handleAddUser = async function (e) {
     // e.preventDefault();
-    console.log(e);
-    const url = window.location.href;
-    const projectID = new URLSearchParams(url.slice(url.indexOf("?"))).get("q");
+    const projectID = searchParams.get("q");
 
     console.log(projectID);
 

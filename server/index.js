@@ -8,6 +8,7 @@ import { userRouter } from "./routes/user.route.js";
 import cookieParser from "cookie-parser";
 import { verifyJWT } from "./middlewares/auth.middleware.js";
 import { projectRouter } from "./routes/project.route.js";
+import issueRouter from "./routes/issue.route.js";
 dotenv.config();
 
 const app = express();
@@ -32,6 +33,7 @@ app.use(cookieParser());
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/project",verifyJWT, projectRouter);
+app.use("/api/v1/issue",verifyJWT, issueRouter);
 
 app.listen(PORT, () => {
   console.log(

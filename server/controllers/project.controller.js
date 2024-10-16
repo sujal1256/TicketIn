@@ -83,9 +83,7 @@ async function handleGetProjects(req, res) {
 async function handleGetProjectDetails(req, res) {
   try {
     // creats a map of serch queries
-    const projectId = new URLSearchParams(
-      req.url.slice(req.url.lastIndexOf("?"))
-    ).get("q");
+    const projectId = req.query["q"];
 
     const projectDetails = await Project.findOne({ _id: projectId }).select(
       "-_id -__v -createdAt -updatedAt"

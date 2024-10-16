@@ -1,9 +1,10 @@
 import express from 'express';
-import { handleIssueCreation } from '../controllers/issue.controller';
+import { handleGetMemberIssues, handleIssueCreation } from '../controllers/issue.controller.js';
 
-const issueRouter = express.Router();
+const issueRouter = express.Router();   
 
 
 issueRouter.route('/create-issue').post(handleIssueCreation);
+issueRouter.route('/get-issues').get(handleGetMemberIssues);
 
 export default issueRouter;
