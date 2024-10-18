@@ -5,11 +5,9 @@ import { ApiError } from "../utils/ApiError.util.js";
 import { ApiResponse } from "../utils/ApiResponse.util.js";
 
 async function handleIssueCreation(req, res) {
-  const { issueTitle, issueStatus, issueDescription, assignedTo } = req.body;
+  const { issueTitle, issueStatus, issueDescription, assignedTo, projectId } = req.body;
 
-  const projectId = req.query["projectId"];
-  console.log(projectId);
-
+  
   // FIXME: issue status will depend on the section we add the issue, it can be Do, Done, Doing
 
   // logged in user is rqe.user who is the creater of issues
@@ -33,21 +31,18 @@ async function handleIssueCreation(req, res) {
   }
 
   const issue = await Issue.create({
-    issueTitle: issueTitle.trim(),
-    issueDescription: issueDescription.trim(),
+    issueTitle: issueTitle?.trim(),
+    issueDescription: issueDescription?.trim(),
     projectId,
     createdBy: createdByUser,
+    issueStatus
   });
 
-  console.log("assignedTo", assignedTo);
 
   if (assignedTo) {
-    console.log(project.members);
-
     const checkAssignedMember = project.members.find(
       (e) => e.userId == assignedTo
     );
-    console.log(checkAssignedMember);
     if (checkAssignedMember) {
       issue.assignedTo = assignedTo;
       await issue.save();

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
+import Avatar from "react-avatar";
 import { FaUser } from "react-icons/fa";
 
 function Issue({ e, userName }) {
   return (
-    <div className="w-full bg-white m-h-16 h-fit p-2 shadow-gray-200 rounded-lg mb-1">
+    <div className="w-full bg-white h-fit p-2 shadow-gray-200 mb-1">
       <p>{e.issueTitle}</p>
       <div className="flex justify-end">
-        <FaUser className="hover:bg-gray-200 p-1 size-6 rounded-full" />
+      <Avatar name={userName} size="22" round = {true} textMarginRatio={0.1}/>
       </div>
     </div>
   );

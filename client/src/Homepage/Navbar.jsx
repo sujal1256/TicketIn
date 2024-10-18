@@ -4,6 +4,8 @@ import { IoIosNotifications } from "react-icons/io";
 import { IoIosHelpCircle } from "react-icons/io";
 import { IoIosSettings } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
+import Avatar from 'react-avatar';
+
 
 import SearchBar from "./SearchBar";
 import useCheckSignedIn from "../utils/useCheckSignedIn";
@@ -28,13 +30,15 @@ function Navbar() {
           {/* <p>Goals</p>
                 <p>Teams</p> */}
         </div>
+        {console.log(loggedInResponse.user)}
         {loggedInResponse.userLoggedIn ? (
           <div className="flex text-2xl gap-2 items-center">
             <SearchBar />
             <IoIosNotifications />
             <IoIosHelpCircle />
             <IoIosSettings />
-            <FaUserCircle />
+            <Avatar name={loggedInResponse.user?.data?.data?.username} size="44" className="rounded-full"/>
+
           </div>
         ) : (
           <div className="flex gap-5">

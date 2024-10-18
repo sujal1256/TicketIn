@@ -25,7 +25,7 @@ function ProjectBoard({ details }) {
 
           {/* Add User */}
           <div className="relative">
-            <button >
+            <button>
               <FaUserPlus
                 className="bg-gray-500  p-1 w-8 h-8 rounded-full"
                 onClick={() => setAddUserMenu(!addUserMenu)}
@@ -48,6 +48,11 @@ function ProjectBoard({ details }) {
             <IoIosSettings className="p-1 w-9 h-9 rounded-full" />
           </button>
         </div>
+      </div>
+      <div className="flex w-full justify-around px-28 gap-3 mt-10">
+        <p className="bg-gray-200 w-full text-center p-3">To Do</p>
+        <p className="bg-gray-200 w-full text-center p-3">Doing</p>
+        <p className="bg-gray-200 w-full text-center p-3">Done</p>
       </div>
       <BoardTasks details={details} />
     </div>
