@@ -7,7 +7,14 @@ function Issue({ e, userName }) {
     <div className="w-full bg-white h-fit p-2 shadow-gray-200 mb-1">
       <p>{e.issueTitle}</p>
       <div className="flex justify-end">
-      <Avatar name={userName} size="22" round = {true} textMarginRatio={0.1}/>
+        {userName === "untracked" ? null : (
+          <Avatar
+            name={userName}
+            size="22"
+            round={true}
+            textMarginRatio={0.1}
+          />
+        )}
       </div>
     </div>
   );

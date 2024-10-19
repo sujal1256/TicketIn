@@ -29,6 +29,10 @@ const issueSchema = new mongoose.Schema({
         ref: 'users',
         required: true,
     },
+    assigned: {
+        type: Boolean,
+        default: "false",
+    }
 
 });
 

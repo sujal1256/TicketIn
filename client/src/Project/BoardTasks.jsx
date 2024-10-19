@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import MemberIssues from "./MemberIssues";
 import { useSearchParams } from "react-router-dom";
+import UntrackedIssues from "./UntrackedIssues";
 
 function BoardTasks({ details }) {
   const [searchParams] = useSearchParams();
@@ -19,16 +20,12 @@ function BoardTasks({ details }) {
   // },[])
   return (
     <div className="overflow-hidden overflow-y-scroll h-[60vh] mt-4">
-
       {/* FIXME: Add number of tasks here */}
       {details.projectDetails?.members?.map((e, index) => {
-        return <MemberIssues member={e} {...details} key={index}/>;
+        return <MemberIssues member={e} key={index} />;
       })}
 
-      <MemberIssues member={undefined} {...details}/>
-
-      
-      
+      <UntrackedIssues />
     </div>
   );
 }
