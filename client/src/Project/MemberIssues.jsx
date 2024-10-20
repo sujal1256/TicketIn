@@ -2,9 +2,9 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import axios from "axios";
-import Issue from "./Issue";
+import Issue from "../Issue/Issue";
 import Avatar from "react-avatar";
-import IssueStatusSection from "./IssueStatusSection";
+import IssueStatusSection from "../Issue/IssueStatusSection";
 
 function MemberIssues({ member }) {
   // find Issues which where assignedTo is member userId of member

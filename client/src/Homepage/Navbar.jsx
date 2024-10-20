@@ -30,7 +30,6 @@ function Navbar() {
           {/* <p>Goals</p>
                 <p>Teams</p> */}
         </div>
-        {console.log(loggedInResponse.user)}
         {loggedInResponse.userLoggedIn ? (
           <div className="flex text-2xl gap-2 items-center">
             <SearchBar />

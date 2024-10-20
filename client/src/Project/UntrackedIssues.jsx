@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
-import IssueStatusSection from "./IssueStatusSection";
-import Issue from "./Issue";
+import IssueStatusSection from "../Issue/IssueStatusSection";
+import Issue from "../Issue/Issue";
 
 function UntrackedIssues() {
   const [untrackedIssues, setUntrackedIssues] = useState();
@@ -18,14 +18,12 @@ function UntrackedIssues() {
           projectId: searchParams.get("q"),
         },
       });
-      console.log("response", response);
 
       setUntrackedIssues(response?.data?.data?.issues);
     }
 
     getIssues();
   }, []);
-  console.log("untrackedIssues", untrackedIssues);
 
   return (
     <div>
@@ -60,7 +58,8 @@ function UntrackedIssues() {
 
         {/* done */}
         <div className="bg-gray-100 w-full h-fit">
-          {untrackedIssues?.filter((e) => e.issueStatus == "Done")
+          {untrackedIssues
+            ?.filter((e) => e.issueStatus == "Done")
             .map((e) => {
               return <Issue e={e} userName={"untracked"} key={e._id} />;
             })}

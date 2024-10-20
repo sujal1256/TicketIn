@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ProjectSidebar from "./ProjectSidebar";
 import ProjectBoard from "./ProjectBoard";
+import IssueDetails from "../Issue/IssueDetails";
 
 function ProjectPage() {
   const [searchParams] = useSearchParams();
@@ -26,14 +27,13 @@ function ProjectPage() {
     console.log("details", details);
   }, []);
 
-
   if (!details) {
     return;
   }
   return (
     <div className="flex">
-      <ProjectSidebar details = {details}/>
-      <ProjectBoard details = {details}/>
+      <ProjectSidebar details={details} />
+      <ProjectBoard details={details} />
     </div>
   );
 }

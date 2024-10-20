@@ -1,7 +1,8 @@
 import React from "react";
 import Issue from "./Issue";
 import { FaPlus } from "react-icons/fa";
-import CreateIssue from "./CreateIssue";
+import CreateIssue from "../Project/CreateIssue";
+import { Link } from "react-router-dom";
 
 function IssueStatusSection({
   allIssues,
@@ -10,7 +11,6 @@ function IssueStatusSection({
   setCreateSection,
   issueStatus,
 }) {
-  
   return (
     <div className="bg-gray-100 w-full h-full">
       {allIssues

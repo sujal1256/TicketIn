@@ -97,6 +97,41 @@ async function handleGetUtrackedIssues(req, res) {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, {issues: issues}, "Untracked issues fetched"));
+    .json(new ApiResponse(200, { issues: issues }, "Untracked issues fetched"));
 }
-export { handleIssueCreation, handleGetMemberIssues, handleGetUtrackedIssues };
+
+async function handleGetIssueDetails(req, res) {
+  const { projectId, selectedIssue } = req.query;
+  if (!projectId || !selectedIssue) {
+    return res
+      .status(400)
+      .json(new ApiError(400, "Value are not sent efficiently"));
+  }
+
+  const issue = await Issue.findOne({ projectId, _id: selectedIssue });
+
+  if (!issue) {
+    return res.status(400).json(new ApiError(400, "issue not found"));
+  }
+
+  const assignedToUser = await User.findOne({ _id: issue.assignedTo }).select("-_id");
+  const createdByUser = await User.findOne({ _id: issue.createdBy }).select("-id -__v");
+  const project = await Project.findOne({_id: projectId}).select("-members");
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        issue: {issue, createdByUser, assignedToUser, project },
+      },
+      "Issue details fetched successfully"
+    )
+  );
+}
+
+export {
+  handleIssueCreation,
+  handleGetMemberIssues,
+  handleGetUtrackedIssues,
+  handleGetIssueDetails,
+};

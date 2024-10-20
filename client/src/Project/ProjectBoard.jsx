@@ -6,12 +6,17 @@ import { IoIosSettings } from "react-icons/io";
 import BoardTasks from "./BoardTasks";
 import AddUserMenu from "./AddUserMenu.jsx";
 import UserComponent from "./UserComponent";
+import { useSearchParams } from "react-router-dom";
+import IssueDetails from "../Issue/IssueDetails.jsx";
 
 function ProjectBoard({ details }) {
   const [addUserMenu, setAddUserMenu] = useState(false);
+  const [searchParams] = useSearchParams();
+  const selectedIssue = searchParams.get("selectedIssue");
 
   return (
-    <div className="border-l-2 p-10 px-2 bg-green-50 w-full">
+    <div className="border-l-2 p-10 px-2 bg-green-50 w-full relative">
+      {selectedIssue && <IssueDetails />}
       <ProjectNavigator details={details} />
       {/* Seach Bar and members */}
       <div className="flex bg-violet-400 w-full justify-between items-center px-2">
