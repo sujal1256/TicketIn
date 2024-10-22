@@ -2,11 +2,11 @@ import React from "react";
 import IssueContent from "./IssueContent";
 import IssueAssignedDetails from "./IssueAssignedDetails";
 
-function IssueBody() {
+function IssueBody({issue}) {
   return (
-    <div className="flex">
-      <IssueContent />
-      <IssueAssignedDetails />
+    <div className="flex justify-center h-full">
+      <IssueContent issue={issue}/>
+      <IssueAssignedDetails issue={issue}/>
     </div>
   );
 }

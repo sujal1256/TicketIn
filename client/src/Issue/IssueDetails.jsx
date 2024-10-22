@@ -25,15 +25,13 @@ function IssueDetails() {
 
     getIssueDetails();
   }, []);
-
-  console.log(issue);
   
   return (
-    <div className="absolute w-full h-full z-10 bg-gray-100 bg-opacity-50 flex justify-center items-center">
+    <div className="absolute w-full h-full z-10 bg-gray-600 bg-opacity-50 flex justify-center items-center">
       {/* issue details */}
       <div className="bg-white w-3/4 h-3/4 p-2 rounded-lg flex-col">
         <IssueNavbar />
-        <IssueBody />
+        <IssueBody issue={issue}/>
       </div>
     </div>
   );
