@@ -1,6 +1,8 @@
 import { Router } from "express";
 import {
+  checkInvitedUser,
   handleAddUserToProject,
+  handleAddUserToProjectViaEmail,
   handleGetProjectDetails,
   handleGetProjects,
   handleProjectCreation,
@@ -15,6 +17,7 @@ projectRouter.route("/").get(handleGetProjects);
 
 projectRouter.route("/get-project-details").get(handleGetProjectDetails);
 
-projectRouter.route('/add-user-to-project').post(handleAddUserToProject)
+projectRouter.route('/add-user-to-project').post(handleAddUserToProjectViaEmail);
+
 
 export { projectRouter };

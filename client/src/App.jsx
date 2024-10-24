@@ -5,6 +5,9 @@ import Signin from "./Signin/Signin.jsx";
 import Signup from "./Signup/Signup.jsx";
 import CreateProject from "./Project/CreateProject.jsx";
 import ProjectPage from "./Project/ProjectPage.jsx";
+import InviteUserToProject from "./Project/InviteUserToProject.jsx";
+import { ToastContainer, toast } from "react-toastify";
+
 
 const router = createBrowserRouter([
   {
@@ -31,6 +34,10 @@ const router = createBrowserRouter([
         path: "project",
         element: <ProjectPage />
       },
+      {
+        path: "invite",
+        element: <InviteUserToProject />
+      },
     ],
   },
 ]);
@@ -38,6 +45,7 @@ const router = createBrowserRouter([
 function Layout() {
   return (
     <>
+      <ToastContainer />
       <Navbar />
       <Outlet />
     </>

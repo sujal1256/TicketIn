@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { useSearchParams } from "react-router-dom";
 
+
 function AddUserMenu() {
   const [email, setEmail] = useState("");
   const [searchParams] = useSearchParams();
@@ -11,22 +12,20 @@ function AddUserMenu() {
     // e.preventDefault();
     const projectID = searchParams.get("q");
 
-    console.log(projectID);
-
     const response = await axios
       .post("api/v1/project/add-user-to-project", {
-        projectID: projectID.trim(),
+        projectId: projectID.trim(),
         email: email.trim(),
       })
       .catch((error) => toast.error(error?.response?.data?.message));
 
-    console.log("Hello");
+    console.log(response);
 
-    toast.success(response.message);
+    toast.success(response?.data?.data.message);
   };
 
   return (
-    <div className="absolute top-[120%] bg-white w-[400%] p-2">
+    <div className="absolute top-[120%] bg-white w-48 p-5">
       <ToastContainer />
       <p className="text-sm">Enter the user email of you want to add</p>
       <input

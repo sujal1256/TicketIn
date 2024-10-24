@@ -2,6 +2,9 @@ import Project from "../models/project.model.js";
 import User from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.util.js";
 import { ApiResponse } from "../utils/ApiResponse.util.js";
+import nodemailer from "nodemailer";
+import { generateInvitationToken } from "../utils/constants.util.js";
+import jwt from "jsonwebtoken";
 
 async function handleProjectCreation(req, res) {
   // members will be only 1 the owner itself
@@ -119,13 +122,13 @@ async function handleAddUserToProject(req, res) {
   // Check if email is ok
   // Get user based on email
   // Check if user is valid
-  const { projectID, email } = req.body;
+  const { projectId, email } = req.body;
 
-  if (!projectID || !email) {
+  if (!projectId || !email) {
     return res.status(400).json(new ApiError(400, "Values are not valid"));
   }
 
-  const project = await Project.findOne({ _id: projectID });
+  const project = await Project.findOne({ _id: projectId });
 
   //  get the user if the user exists add the user to members of the project if the user does not exist then create a user and then add it
   // FIXME: As we will be sending a confirmation mail while adding the user so the person will signup first after clicking on confirmation link
@@ -154,7 +157,9 @@ async function handleAddUserToProject(req, res) {
   });
 
   if (!alreadyExists) {
-    return res.status(400).json(new ApiError(400, "User is already added in the project"));
+    return res
+      .status(400)
+      .json(new ApiError(400, "User is already added in the project"));
   }
   await project.members.push({
     userName: user.username,
@@ -169,9 +174,101 @@ async function handleAddUserToProject(req, res) {
     .json(new ApiResponse(200, project, "Member Added successfully"));
 }
 
+async function checkInvitedUser(req, res) {
+  const { token } = req.query;
+
+  console.log(token);
+  
+  try {
+    if (!token) {
+      return res.status(500).json(new ApiError(500, "Token not found"));
+    }
+
+    const decodedToken = await jwt.verify(
+      token,
+      process.env.ACESS_TOKEN_SECRET_KEY
+    );
+
+    if (!decodedToken) {
+      return res.status(500).json(new ApiError(500, "token expired"));
+    }
+
+    console.log("decodedToken", decodedToken);
+
+    const user = await User.findOne({ email: decodedToken.userId });
+    if (!user) {
+      return res
+        .status(400)
+        .json(new ApiError(400, "User not found redirect to /signup"));
+    }
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, user, "User found rediect to /"));
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+async function handleAddUserToProjectViaEmail(req, res) {
+  try {
+    const { projectId, email } = req.body;
+
+    // getting the data
+
+    if (!projectId || !email) {
+      return res.status(400).json(new ApiError(400, "Values are not valid"));
+    }
+
+    const project = await Project.findOne({ _id: projectId });
+
+    if (!project) {
+      return res.status(500).json(new ApiError(400, "Project Not found"));
+    }
+
+    const projectOwner = await User.findOne({ _id: project?.projectOwner });
+
+    if (!projectOwner) {
+      return res.status(400).json(new ApiError(400, "Project Owner not found"));
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      auth: {
+        user: "msujal29012004@gmail.com",
+        pass: "xwdx jyzu gycj mdnw",
+      },
+    });
+
+    const token = generateInvitationToken(email, projectId);
+
+    const invitationLink = `http://localhost:5173/invite?token=${token}`;
+
+    const mailOptions = {
+      from: {
+        name: "Sujal Malhotra 👻",
+        address: "workwithsujal04@gmail.com", // sender address
+      },
+      to: "msujal29012004@gmail.com", // list of receivers
+      subject: "You're invited to the project!",
+      html: `<p>Hello! You’ve been invited to join the project. Click the link below to accept the invitation:</p>
+           <a href="${invitationLink}">Join Project</a>`,
+    };
+    const info = await transporter.sendMail(mailOptions);
+
+    return res.status(200).json(new ApiResponse(200, info, "Email sent"));
+  } catch (error) {
+    console.log("Error in sending the mail", error.message);
+  }
+}
+
 export {
   handleProjectCreation,
   handleGetProjects,
   handleGetProjectDetails,
   handleAddUserToProject,
+  handleAddUserToProjectViaEmail,
+  checkInvitedUser
 };
