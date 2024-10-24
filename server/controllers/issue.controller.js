@@ -110,23 +110,63 @@ async function handleGetIssueDetails(req, res) {
 
   const issue = await Issue.findOne({ projectId, _id: selectedIssue });
 
+  console.log(issue);
+  
+
   if (!issue) {
     return res.status(400).json(new ApiError(400, "issue not found"));
   }
 
-  const assignedToUser = await User.findOne({ _id: issue.assignedTo }).select("-_id");
-  const createdByUser = await User.findOne({ _id: issue.createdBy }).select("-id -__v");
-  const project = await Project.findOne({_id: projectId}).select("-members");
+  const assignedToUser = await User.findOne({ _id: issue.assignedTo }).select(
+    "-_id"
+  );
+  const createdByUser = await User.findOne({ _id: issue.createdBy }).select(
+    "-id -__v"
+  );
+  const project = await Project.findOne({ _id: projectId }).select("-members");
 
   return res.status(200).json(
     new ApiResponse(
       200,
       {
-        issue: {issue, createdByUser, assignedToUser, project },
+        issue: { issue, createdByUser, assignedToUser, project },
       },
       "Issue details fetched successfully"
     )
   );
+}
+
+async function handleUpdateIssue(req, res) {
+  const {
+    issueTitle,
+    issueDescription,
+    issueStatus,
+    assignedTo,
+    issueId,
+    assigned,
+  } = req.body;
+
+  console.log(req.body);
+  console.log(issueId);
+  
+  const issue = await Issue.findOneAndUpdate(
+    { _id: issueId },
+    {
+      $set: {
+        issueTitle: issueTitle,
+        issueDescription: issueDescription,
+        issueStatus: issueStatus,
+        assignedTo: assignedTo,
+        assigned: assigned,
+      },
+    },
+    { new: true }
+  );
+  console.log("issue", issue);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, issue, "Issue Update successfully"));
 }
 
 export {
@@ -134,4 +174,5 @@ export {
   handleGetMemberIssues,
   handleGetUtrackedIssues,
   handleGetIssueDetails,
+  handleUpdateIssue,
 };
