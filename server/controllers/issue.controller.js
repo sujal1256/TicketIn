@@ -117,10 +117,10 @@ async function handleGetIssueDetails(req, res) {
   }
 
   const assignedToUser = await User.findOne({ _id: issue.assignedTo }).select(
-    "-_id"
+    "-password -__v"
   );
   const createdByUser = await User.findOne({ _id: issue.createdBy }).select(
-    "-id -__v"
+    "-password -__v"
   );
   const project = await Project.findOne({ _id: projectId }).select("-members");
 

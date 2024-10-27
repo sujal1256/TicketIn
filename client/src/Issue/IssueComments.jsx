@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 
-function IssueComments({ issue }) {
+function IssueComments() {
+  const issue = JSON.parse(sessionStorage.getItem("issueDetails"));
+
   const [commentContent, setCommentContent] = useState("");
-  
+
   return (
     <div className="bg-red- mt-10 p-4 flex flex-col gap-2">
       <div>

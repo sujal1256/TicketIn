@@ -21,10 +21,14 @@ function ProjectPage() {
           console.log("Error while getting project data" + error.message);
         });
       setDetails(response.data.data);
+      sessionStorage.setItem("projectDetails", JSON.stringify(response.data.data));
     }
 
     getProjectDetails();
-    console.log("details", details);
+
+    return(()=>{
+      sessionStorage.removeItem("projectDetails");
+    })
   }, []);
 
   if (!details) {
@@ -32,8 +36,8 @@ function ProjectPage() {
   }
   return (
     <div className="flex">
-      <ProjectSidebar details={details} />
-      <ProjectBoard details={details} />
+      <ProjectSidebar />
+      <ProjectBoard />
     </div>
   );
 }

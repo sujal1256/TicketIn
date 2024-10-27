@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import IssueComments from "./IssueComments";
 import axios from "axios";
 
-function IssueContent({ issue }) {
+function IssueContent() {
+  const issue = JSON.parse(sessionStorage.getItem("issueDetails"));
+
   const [descriptionBlock, setDescriptionBlock] = useState(false);
   const [description, setDescription] = useState(
     issue?.issue?.issueDescription
@@ -14,7 +16,6 @@ function IssueContent({ issue }) {
     setTitle(issue?.issue?.issueTitle);
     setDescription(issue?.issue?.issueDescription);
   }, [issue]);
-
 
   async function handleSaveData() {
     try {
@@ -123,7 +124,7 @@ function IssueContent({ issue }) {
         )}
       </div>
 
-      <IssueComments issue={issue} />
+      <IssueComments  />
     </div>
   );
 }

@@ -9,7 +9,8 @@ import UserComponent from "./UserComponent";
 import { useSearchParams } from "react-router-dom";
 import IssueDetails from "../Issue/IssueDetails.jsx";
 
-function ProjectBoard({ details }) {
+function ProjectBoard() {
+  const details = JSON.parse(sessionStorage.getItem("projectDetails"));
   const [addUserMenu, setAddUserMenu] = useState(false);
   const [searchParams] = useSearchParams();
   const selectedIssue = searchParams.get("selectedIssue");
@@ -17,7 +18,7 @@ function ProjectBoard({ details }) {
   return (
     <div className="border-l-2 p-10 px-2 bg-green-50 w-full relative">
       {selectedIssue && <IssueDetails />}
-      <ProjectNavigator details={details} />
+      <ProjectNavigator />
       {/* Seach Bar and members */}
       <div className="flex bg-violet-400 w-full justify-between items-center px-2">
         <div className="flex items-center gap-5 bg-red-300  ">
@@ -59,7 +60,7 @@ function ProjectBoard({ details }) {
         <p className="bg-gray-200 w-full text-center p-3">Doing</p>
         <p className="bg-gray-200 w-full text-center p-3">Done</p>
       </div>
-      <BoardTasks details={details} />
+      <BoardTasks />
     </div>
   );
 }

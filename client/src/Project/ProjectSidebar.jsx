@@ -1,8 +1,9 @@
 import React from "react";
 import { GoProject } from "react-icons/go";
 
-function ProjectSidebar({ details }) {
-  console.log(details);
+function ProjectSidebar() {
+  const details = JSON.parse(sessionStorage.getItem("projectDetails"));
+
   const styleString =
     "bg-red-100 w-full flex items-center gap-2 p-2 rounded-lg flex overflow-hidden";
   return (
