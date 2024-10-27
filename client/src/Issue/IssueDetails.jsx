@@ -3,12 +3,16 @@ import IssueNavbar from "./IssueNavbar";
 import IssueBody from "./IssueBody";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import {storeIssue, removeIssue} from '../redux/issueSlice'
 
 function IssueDetails() {
   const [searchParams] = useSearchParams();
   const selectedIssue = searchParams.get("selectedIssue");
   const projectId = searchParams.get("q");
   const [issue, setIssue] = useState();
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     async function getIssueDetails() {
@@ -20,12 +24,12 @@ function IssueDetails() {
       });
 
       setIssue(response?.data?.data?.issue);
-      sessionStorage.setItem("issueDetails", JSON.stringify(response?.data?.data?.issue));
+      dispatch(storeIssue(response?.data?.data.issue));
     }
 
     getIssueDetails();
     return (()=>{
-      sessionStorage.removeItem("issueDetails");
+      dispatch(removeIssue());
     })
   }, []);
 

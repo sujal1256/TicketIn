@@ -166,11 +166,19 @@ async function handleUpdateIssue(req, res) {
     },
     { new: true }
   );
-  console.log("issue", issue);
+
+  const assignedToUser = await User.findOne({ _id: issue.assignedTo });
+  const createdByUser = await User.findOne({ _id: issue.createdBy });
 
   return res
     .status(200)
-    .json(new ApiResponse(200, issue, "Issue Update successfully"));
+    .json(
+      new ApiResponse(
+        200,
+        { issue: issue, assignedToUser, createdByUser },
+        "Issue Update successfully"
+      )
+    );
 }
 
 async function handleDeleteIssue(req, res) {

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import IssueComments from "./IssueComments";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import {storeIssue} from '../redux/issueSlice'
 
 function IssueContent() {
-  const issue = JSON.parse(sessionStorage.getItem("issueDetails"));
+  const dispatch = useDispatch();
+  const issue = useSelector((state) => state.issue.issue);
 
   const [descriptionBlock, setDescriptionBlock] = useState(false);
   const [description, setDescription] = useState(
@@ -30,11 +33,13 @@ function IssueContent() {
       const updatedIssue = response?.data?.data;
 
       // Update state with the returned data to reflect changes immediately
-      setTitle(updatedIssue?.issueTitle || title);
-      setDescription(updatedIssue?.issueDescription || description);
+      setTitle(updatedIssue?.issue?.issueTitle || title);
+      setDescription(updatedIssue?.issue?.issueDescription || description);
 
       setTitleBox(false);
       setDescriptionBlock(false);
+
+      dispatch(storeIssue(response?.data?.data));
     } catch (error) {
       console.error("Error updating issue:", error);
     }
@@ -124,7 +129,7 @@ function IssueContent() {
         )}
       </div>
 
-      <IssueComments  />
+      <IssueComments />
     </div>
   );
 }

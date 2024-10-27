@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 function IssueComments() {
-  const issue = JSON.parse(sessionStorage.getItem("issueDetails"));
+  const issue = useSelector(state => state.issue.issue);
 
   const [commentContent, setCommentContent] = useState("");
 

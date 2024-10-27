@@ -8,9 +8,10 @@ import AddUserMenu from "./AddUserMenu.jsx";
 import UserComponent from "./UserComponent";
 import { useSearchParams } from "react-router-dom";
 import IssueDetails from "../Issue/IssueDetails.jsx";
+import { useSelector } from "react-redux";
 
 function ProjectBoard() {
-  const details = JSON.parse(sessionStorage.getItem("projectDetails"));
+  const project = useSelector(state => state.project.project);
   const [addUserMenu, setAddUserMenu] = useState(false);
   const [searchParams] = useSearchParams();
   const selectedIssue = searchParams.get("selectedIssue");
@@ -24,7 +25,7 @@ function ProjectBoard() {
         <div className="flex items-center gap-5 bg-red-300  ">
           <BoardSearchBar />
           <div className="flex">
-            {details?.projectDetails?.members.map((e, index) => {
+            {project?.projectDetails?.members.map((e, index) => {
               return <UserComponent key={index} {...e} />;
             })}
           </div>

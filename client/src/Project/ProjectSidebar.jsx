@@ -1,8 +1,9 @@
 import React from "react";
 import { GoProject } from "react-icons/go";
+import { useSelector } from "react-redux";
 
 function ProjectSidebar() {
-  const details = JSON.parse(sessionStorage.getItem("projectDetails"));
+  const project = useSelector(state => state.project.project);
 
   const styleString =
     "bg-red-100 w-full flex items-center gap-2 p-2 rounded-lg flex overflow-hidden";
@@ -11,7 +12,7 @@ function ProjectSidebar() {
       <div className={styleString}>
         <GoProject className="text-xl bg-black" />
         <div className="flex flex-col shrink-0 ">
-          <p>{details?.projectDetails?.projectName}</p>
+          <p>{project?.projectDetails?.projectName}</p>
           <p className="text-gray-500 text-sm">Software Project</p>
         </div>
       </div>

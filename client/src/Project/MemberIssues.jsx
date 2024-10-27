@@ -5,11 +5,14 @@ import axios from "axios";
 import Issue from "../Issue/Issue";
 import Avatar from "react-avatar";
 import IssueStatusSection from "../Issue/IssueStatusSection";
+import { useSelector } from "react-redux";
 
 function MemberIssues({ member }) {
   // find Issues which where assignedTo is member userId of member
   const [searchParams] = useSearchParams();
   const [allIssues, setAllIssues] = useState([]);
+  const issue = useSelector(state => state.issue.issue);
+
 
   const [todoCreateSection, setTodoCreateSection] = useState(false);
   const [doingCreateSection, setDoingCreateSection] = useState(false);
@@ -27,7 +30,7 @@ function MemberIssues({ member }) {
     }
 
     getIssues();
-  }, [todoCreateSection, doingCreateSection]);
+  }, [todoCreateSection, doingCreateSection, issue]);
 
   if (allIssues.length == 0) return;
 

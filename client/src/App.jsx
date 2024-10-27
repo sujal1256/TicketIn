@@ -6,7 +6,10 @@ import Signup from "./Signup/Signup.jsx";
 import CreateProject from "./Project/CreateProject.jsx";
 import ProjectPage from "./Project/ProjectPage.jsx";
 import InviteUserToProject from "./Project/InviteUserToProject.jsx";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import { Provider } from 'react-redux'
+import store from "./redux/store.js";
+
 
 
 const router = createBrowserRouter([
@@ -44,11 +47,11 @@ const router = createBrowserRouter([
 
 function Layout() {
   return (
-    <>
+    <Provider store={store}>
       <ToastContainer />
       <Navbar />
       <Outlet />
-    </>
+    </Provider>
   );
 }
 function App() {

@@ -3,11 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ProjectSidebar from "./ProjectSidebar";
 import ProjectBoard from "./ProjectBoard";
-import IssueDetails from "../Issue/IssueDetails";
-
+import { useDispatch } from "react-redux";
+import { storeProject, removeProject } from "../redux/projectSlice";
 function ProjectPage() {
   const [searchParams] = useSearchParams();
   const [details, setDetails] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function getProjectDetails() {
@@ -21,14 +22,14 @@ function ProjectPage() {
           console.log("Error while getting project data" + error.message);
         });
       setDetails(response.data.data);
-      sessionStorage.setItem("projectDetails", JSON.stringify(response.data.data));
+      dispatch(storeProject(response?.data?.data));
     }
 
     getProjectDetails();
 
-    return(()=>{
-      sessionStorage.removeItem("projectDetails");
-    })
+    return () => {
+      dispatch(removeProject());
+    };
   }, []);
 
   if (!details) {

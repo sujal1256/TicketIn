@@ -2,20 +2,17 @@ import React, { useEffect, useState } from "react";
 import Avatar from "react-avatar";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import {storeIssue} from '../redux/issueSlice'
 
 function IssueAssignedDetails() {
-  const issue = JSON.parse(sessionStorage.getItem("issueDetails"));
-  const project = JSON.parse(sessionStorage.getItem("projectDetails"));
+  const issue = useSelector(state => state.issue.issue);
+  const project = useSelector(state => state.project.project);
+  const dispatch = useDispatch();
 
-  const [issueStatus, setIssueStatus] = useState(issue?.issue?.issueStatus);
-  const [assignee, setAssignee] = useState(issue?.assignedToUser);
   const [dropdownOpen, setDropdownOpen] = useState(false); // Dropdown state
   const [searchParams] = useSearchParams();
 
-  useEffect(() => {
-    setIssueStatus(issue?.issue?.issueStatus);
-    setAssignee(issue?.assignedToUser);
-  }, [issue]);
 
   async function handleIssueStatusChange(e) {
     const response = await axios.post("/api/v1/issue/update-issue", {
@@ -24,7 +21,8 @@ function IssueAssignedDetails() {
       issueId: searchParams.get("selectedIssue"),
     });
 
-    setIssueStatus(response.data?.data?.issueStatus);
+    dispatch(storeIssue(response?.data?.data));
+    
   }
 
   async function handleAssigneeChange(newAssignee) {
@@ -33,15 +31,18 @@ function IssueAssignedDetails() {
       assignedTo: newAssignee.userId,
       issueId: searchParams.get("selectedIssue"),
     });
-
-    setAssignee(newAssignee); // Update state with the new assignee
+    console.log(response?.data?.data);
+    
     setDropdownOpen(false); // Close dropdown
+    dispatch(storeIssue(response?.data?.data));
+
+
   }
 
   return (
     <div className="w-full">
       <div className="flex justify-start p-2 mt-2">
-        <select value={issueStatus} onChange={handleIssueStatusChange}>
+        <select value={issue?.issue?.issueStatus} onChange={handleIssueStatusChange}>
           <option value="Todo">Todo</option>
           <option value="Doing">Doing</option>
           <option value="Done">Done</option>
@@ -62,9 +63,9 @@ function IssueAssignedDetails() {
             <td className="flex items-center gap-2 relative">
               {/* Assignee display that toggles dropdown */}
               <div onClick={() => setDropdownOpen(!dropdownOpen)} className="cursor-pointer flex items-center gap-2">
-                <Avatar name={assignee?.username} size="33" round={true} />
+                <Avatar name={issue?.assignedToUser?.username} size="33" round={true} />
                 <p className="w-fit text-sm text-gray-700">
-                  {assignee?.username}
+                  {issue?.assignedToUser?.username}
                 </p>
               </div>
 
