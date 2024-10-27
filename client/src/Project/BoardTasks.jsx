@@ -20,7 +20,6 @@ function BoardTasks({ details }) {
   // },[])
   return (
     <div className="overflow-hidden overflow-y-scroll h-[60vh] mt-4">
-      {/* FIXME: Add number of tasks here */}
       {details.projectDetails?.members?.map((e, index) => {
         return <MemberIssues member={e} key={index} />;
       })}

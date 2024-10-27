@@ -111,7 +111,6 @@ async function handleGetIssueDetails(req, res) {
   const issue = await Issue.findOne({ projectId, _id: selectedIssue });
 
   console.log(issue);
-  
 
   if (!issue) {
     return res.status(400).json(new ApiError(400, "issue not found"));
@@ -146,9 +145,14 @@ async function handleUpdateIssue(req, res) {
     assigned,
   } = req.body;
 
-  console.log(req.body);
-  console.log(issueId);
-  
+  console.log("req.body", req.body);
+
+  if (!issueTitle || !issueId) {
+    return res
+      .status(400)
+      .json(new ApiError(400, "Data not received properly"));
+  }
+
   const issue = await Issue.findOneAndUpdate(
     { _id: issueId },
     {
@@ -169,10 +173,42 @@ async function handleUpdateIssue(req, res) {
     .json(new ApiResponse(200, issue, "Issue Update successfully"));
 }
 
+async function handleDeleteIssue(req, res) {
+  try {
+    const { issueId } = req.body;
+
+    if (!issueId) {
+      return res
+        .status(400)
+        .json(new ApiError(400, "Issue to be deleted not found"));
+    }
+
+    const issue = await Issue.findOneAndDelete({ _id: issueId }).catch(
+      (error) => {
+        console.log("Error in deleting the issue", error.message);
+      }
+    );
+
+    if (!issue) {
+      return res.status(400).json(new ApiError(400, "Issue not found"));
+    }
+
+    console.log(issueId);
+    console.log(issue);
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, issue, "Issue successfully deleted"));
+  } catch (error) {
+    console.log("Error in deleting the issue", error.message);
+  }
+}
+
 export {
   handleIssueCreation,
   handleGetMemberIssues,
   handleGetUtrackedIssues,
   handleGetIssueDetails,
   handleUpdateIssue,
+  handleDeleteIssue,
 };

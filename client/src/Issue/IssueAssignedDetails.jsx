@@ -1,13 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "react-avatar";
+import { useSearchParams } from "react-router-dom";
+import axios from "axios";
 
 function IssueAssignedDetails({ issue }) {
-  console.log(issue);
+  const [issueStatus, setIssueStatus] = useState(issue?.issue?.issueStatus);
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    setIssueStatus(issue?.issue?.issueStatus);
+    console.log("called");
+    
+  }, [issue]);
+
+  async function handleIssueChange(e) {    
+    
+    const response = await axios.post("/api/v1/issue/update-issue", {
+      ...issue.issue,
+      issueStatus: e.target.value,
+      issueId: searchParams.get("selectedIssue")
+    });
+
+    console.log(response);
+
+    setIssueStatus(response.data?.data?.issueStatus);
+  }
+  
 
   return (
     <div className="w-full">
       <div className="flex justify-start p-2 mt-2">
-        <select value={issue?.issue?.issueStatus}>
+        <select value={issueStatus} onChange={handleIssueChange}>
           <option value="Todo">Todo</option>
           <option value="Doing">Doing</option>
           <option value="Done">Done</option>
@@ -41,12 +64,12 @@ function IssueAssignedDetails({ issue }) {
             <td className="text-sm font-medium text-gray-700">Reporter</td>
             <td className="flex items-center gap-2">
               <Avatar
-                name={issue?.assignedToUser?.username}
+                name={issue?.createdByUser?.username}
                 size="33"
                 round={true}
               />
               <p className="w-fit text-sm text-gray-700">
-                {issue?.assignedToUser?.username}
+                {issue?.createdByUser?.username}
               </p>
             </td>
           </tr>
@@ -56,11 +79,15 @@ function IssueAssignedDetails({ issue }) {
       <div>
         <p>
           Created At{" "}
-          <span className="underline">{new Date(issue?.issue?.createdAt).toDateString()}</span>
+          <span className="underline">
+            {new Date(issue?.issue?.createdAt).toDateString()}
+          </span>
         </p>
         <p>
           Updated At{" "}
-          <span className="underline">{new Date(issue?.issue?.createdAt).toTimeString().split(' ')[0]}</span>
+          <span className="underline">
+            {new Date(issue?.issue?.createdAt).toTimeString().split(" ")[0]}
+          </span>
         </p>
       </div>
     </div>
