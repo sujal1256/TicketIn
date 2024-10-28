@@ -7,7 +7,8 @@ import Project from "../models/project.model.js";
 async function handleAddComment(req, res) {
   try {
     const { issueId, commentText, projectId } = req.body;
-
+    console.log(issueId, commentText, projectId);
+    
     if (
       [commentText?.trim(), issueId?.trim(), projectId?.trim()].some(
         (e) => e == undefined

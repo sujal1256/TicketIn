@@ -46,7 +46,7 @@ function IssueContent() {
   }
 
   return (
-    <div className="mt-2 w-full h-full overflow-y-auto">
+    <div className="w-full h-full overflow-y-auto">
       {/* issue title */}
       {!titleBox && (
         <p className="p-1 text-3xl" onClick={() => setTitleBox(true)}>
