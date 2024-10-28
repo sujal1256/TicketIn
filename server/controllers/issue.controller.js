@@ -102,6 +102,7 @@ async function handleGetUtrackedIssues(req, res) {
 
 async function handleGetIssueDetails(req, res) {
   const { projectId, selectedIssue } = req.query;
+
   if (!projectId || !selectedIssue) {
     return res
       .status(400)

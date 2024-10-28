@@ -1,8 +1,10 @@
 import express from 'express';
 import { handleGetMemberIssues, handleGetUtrackedIssues, handleIssueCreation, handleGetIssueDetails, handleUpdateIssue, handleDeleteIssue } from '../controllers/issue.controller.js';
+import commentRouter from './comment.route.js';
 
 const issueRouter = express.Router();   
 
+issueRouter.use('/comment', commentRouter);
 
 issueRouter.route('/create-issue').post(handleIssueCreation);
 issueRouter.route('/get-issues').get(handleGetMemberIssues);

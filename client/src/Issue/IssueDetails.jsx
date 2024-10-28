@@ -4,7 +4,7 @@ import IssueBody from "./IssueBody";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import {storeIssue, removeIssue} from '../redux/issueSlice'
+import { storeIssue, removeIssue } from "../redux/issueSlice";
 
 function IssueDetails() {
   const [searchParams] = useSearchParams();
@@ -12,7 +12,6 @@ function IssueDetails() {
   const projectId = searchParams.get("q");
   const [issue, setIssue] = useState();
   const dispatch = useDispatch();
-
 
   useEffect(() => {
     async function getIssueDetails() {
@@ -22,23 +21,34 @@ function IssueDetails() {
           selectedIssue,
         },
       });
-
       setIssue(response?.data?.data?.issue);
       dispatch(storeIssue(response?.data?.data.issue));
     }
 
+    async function getIssueComments() {
+      const response = await axios.get(
+        "/api/v1/issue/comment/get-all-comments",
+        {
+          params: { issueId: selectedIssue, projectId },
+        }
+      );
+
+      console.log(response?.data?.data);
+    }
+
+    getIssueComments();
     getIssueDetails();
-    return (()=>{
+    return () => {
       dispatch(removeIssue());
-    })
+    };
   }, []);
 
   return (
-    <div className="absolute w-full h-full z-10 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+    <div className="absolute w-full h-full z-10 bg-gray-600 bg-opacity-50 flex justify-center items-center overflow-hidden">
       {/* issue details */}
       <div className="bg-white w-3/4 h-3/4 p-2 rounded-lg flex-col">
         <IssueNavbar />
-        <IssueBody  />
+        <IssueBody />
       </div>
     </div>
   );
