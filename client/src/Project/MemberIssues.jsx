@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import axios from "axios";
@@ -8,11 +8,9 @@ import IssueStatusSection from "../Issue/IssueStatusSection";
 import { useSelector } from "react-redux";
 
 function MemberIssues({ member }) {
-  // find Issues which where assignedTo is member userId of member
   const [searchParams] = useSearchParams();
   const [allIssues, setAllIssues] = useState([]);
-  const issue = useSelector(state => state.issue.issue);
-
+  const issue = useSelector((state) => state.issue.issue);
 
   const [todoCreateSection, setTodoCreateSection] = useState(false);
   const [doingCreateSection, setDoingCreateSection] = useState(false);
@@ -32,7 +30,7 @@ function MemberIssues({ member }) {
     getIssues();
   }, [todoCreateSection, doingCreateSection, issue]);
 
-  if (allIssues.length == 0) return;
+  if (allIssues.length === 0) return null;
 
   return (
     <div>
@@ -51,32 +49,36 @@ function MemberIssues({ member }) {
         </p>
       </div>
       {/* issues */}
-      <div className="flex w-full justify-around px-28 gap-4 ">
-        {/* todo */}
-        <IssueStatusSection
-          allIssues={allIssues}
-          member={member}
-          issueStatus={"Todo"}
-          createSection={todoCreateSection}
-          setCreateSection={setTodoCreateSection}
-        />
+      <div className="flex w-full justify-around px-28 gap-4 h-screen bg-red-300">
+        {/* Todo */}
+        <div className="flex-1 flex flex-col h-full">
+          <IssueStatusSection
+            allIssues={allIssues}
+            member={member}
+            issueStatus={"Todo"}
+            createSection={todoCreateSection}
+            setCreateSection={setTodoCreateSection}
+          />
+        </div>
 
-        {/* doing */}
-        <IssueStatusSection
-          allIssues={allIssues}
-          member={member}
-          issueStatus={"Doing"}
-          createSection={doingCreateSection}
-          setCreateSection={setDoingCreateSection}
-        />
+        {/* Doing */}
+        <div className="flex-1 flex flex-col h-full">
+          <IssueStatusSection
+            allIssues={allIssues}
+            member={member}
+            issueStatus={"Doing"}
+            createSection={doingCreateSection}
+            setCreateSection={setDoingCreateSection}
+          />
+        </div>
 
-        {/* done */}
-        <div className="bg-gray-100 w-full h-fit">
-          {allIssues
-            .filter((e) => e.issueStatus == "Done")
-            .map((e) => {
-              return <Issue e={e} userName={member.userName} key={e._id} />;
-            })}
+        {/* Done */}
+        <div className="flex-1 flex flex-col h-full">
+          <IssueStatusSection
+            allIssues={allIssues}
+            member={member}
+            issueStatus={"Done"}
+          />
         </div>
       </div>
     </div>
