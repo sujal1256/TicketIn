@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Avatar from "react-avatar";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import {storeIssue} from '../redux/issueSlice'
+import { storeIssue } from "../redux/issueSlice";
+import { FaTrashAlt } from "react-icons/fa";
 
 function IssueAssignedDetails() {
-  const issue = useSelector(state => state.issue.issue);
-  const project = useSelector(state => state.project.project);
-  const dispatch = useDispatch();
-
-  const [dropdownOpen, setDropdownOpen] = useState(false); // Dropdown state
+  const issue = useSelector((state) => state.issue.issue);
+  const project = useSelector((state) => state.project.project);
+  const [dropdownOpen, setDropdownOpen] = useState(false); 
   const [searchParams] = useSearchParams();
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   async function handleIssueStatusChange(e) {
     const response = await axios.post("/api/v1/issue/update-issue", {
@@ -22,7 +22,6 @@ function IssueAssignedDetails() {
     });
 
     dispatch(storeIssue(response?.data?.data));
-    
   }
 
   async function handleAssigneeChange(newAssignee) {
@@ -32,21 +31,48 @@ function IssueAssignedDetails() {
       issueId: searchParams.get("selectedIssue"),
     });
     console.log(response?.data?.data);
-    
+
     setDropdownOpen(false); // Close dropdown
     dispatch(storeIssue(response?.data?.data));
+  }
 
+  async function handleDelete(e) {
+    e.preventDefault();
+    // Add your delete logic here
 
+    try {
+      const response = await axios.post("/api/v1/issue/delete-issue", {
+        issueId: searchParams.get("selectedIssue"),
+      });
+      // nothing to do with storage only did to update the frontend
+      dispatch(storeIssue([]));
+      console.log(response);
+      navigate("/project?q=" + searchParams.get('q'))
+    } catch (error) {
+      console.log("Error in deleting the issue", error?.message);
+    }
   }
 
   return (
     <div className="w-full">
-      <div className="flex justify-start p-2 mt-2">
-        <select value={issue?.issue?.issueStatus} onChange={handleIssueStatusChange}>
+      <div className="flex justify-start p-2 mt-2 gap-2">
+        <select
+          value={issue?.issue?.issueStatus}
+          onChange={handleIssueStatusChange}
+          className="bg-white border  text-gray-700 py-2 px-3 rounded-md shadow-sm outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-400"
+        >
           <option value="Todo">Todo</option>
           <option value="Doing">Doing</option>
           <option value="Done">Done</option>
         </select>
+
+        <button
+          className="flex gap-1 items-center text-red-500 hover:text-white hover:bg-red-500 transition-colors duration-100 px-3 py-1 rounded-md"
+          onClick={handleDelete}
+        >
+          <FaTrashAlt />
+          Delete
+        </button>
       </div>
 
       <table className="mt-3 w-full border border-gray-300 rounded-lg">
@@ -62,8 +88,15 @@ function IssueAssignedDetails() {
             <td className="text-sm font-medium text-gray-700">Assignee</td>
             <td className="flex items-center gap-2 relative">
               {/* Assignee display that toggles dropdown */}
-              <div onClick={() => setDropdownOpen(!dropdownOpen)} className="cursor-pointer flex items-center gap-2">
-                <Avatar name={issue?.assignedToUser?.username} size="33" round={true} />
+              <div
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="cursor-pointer flex items-center gap-2"
+              >
+                <Avatar
+                  name={issue?.assignedToUser?.username}
+                  size="33"
+                  round={true}
+                />
                 <p className="w-fit text-sm text-gray-700">
                   {issue?.assignedToUser?.username}
                 </p>
@@ -90,7 +123,11 @@ function IssueAssignedDetails() {
           <tr className="w-full flex items-center justify-between px-3 py-2 border-b">
             <td className="text-sm font-medium text-gray-700">Reporter</td>
             <td className="flex items-center gap-2">
-              <Avatar name={issue?.createdByUser?.username} size="33" round={true} />
+              <Avatar
+                name={issue?.createdByUser?.username}
+                size="33"
+                round={true}
+              />
               <p className="w-fit text-sm text-gray-700">
                 {issue?.createdByUser?.username}
               </p>

@@ -23,7 +23,10 @@ function UntrackedIssues() {
     }
 
     getIssues();
-  }, []);
+  }, [todoCreateSection, doingCreateSection]);
+
+  console.log(untrackedIssues);
+  
 
   return (
     <div>
@@ -57,13 +60,11 @@ function UntrackedIssues() {
         />
 
         {/* done */}
-        <div className="bg-gray-100 w-full h-fit">
-          {untrackedIssues
-            ?.filter((e) => e.issueStatus == "Done")
-            .map((e) => {
-              return <Issue e={e} userName={"untracked"} key={e._id} />;
-            })}
-        </div>
+        <IssueStatusSection
+          allIssues={untrackedIssues}
+          member={{ userName: "untracked" }}
+          issueStatus={"Done"}
+        />
       </div>
     </div>
   );

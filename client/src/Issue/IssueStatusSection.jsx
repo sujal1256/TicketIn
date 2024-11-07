@@ -39,7 +39,7 @@ function IssueStatusSection({
       {allIssues
         ?.filter((e) => e.issueStatus == issueStatus)
         .map((e) => {
-          return <Issue e={e} userName={member.userName} key={e._id} />;
+          return <Issue e={e} userName={member.userName} key={e._id} issueId={e._id} />;
         })}
 
       {issueStatus != "Done" && !createSection && (

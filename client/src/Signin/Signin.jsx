@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
+
 function Signin() {
   // State for email and password
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const backendURL = "http://localhost:5500";
+  const navigate = useNavigate();
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -15,6 +18,8 @@ function Signin() {
         password, email
       });
       console.log(userloggedIn);
+      navigate("/");
+      window.location.reload();
     }
     
     catch(error){

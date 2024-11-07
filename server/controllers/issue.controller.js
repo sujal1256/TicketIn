@@ -85,7 +85,9 @@ async function handleGetUtrackedIssues(req, res) {
     return res.status(400).json(new ApiError(400, "Values are not defined"));
   }
 
-  const issues = await Issue.find({ projectId });
+  const issues = (await Issue.find({ projectId })).filter(
+    (e) => e.assigned == false
+  );
 
   if (!issues) {
     return res

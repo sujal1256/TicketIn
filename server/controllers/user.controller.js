@@ -24,7 +24,6 @@ async function handleUserRegister(req, res) {
   const existedUser = await User.findOne({ email });
   if (existedUser) {
     return res.status(400).json(new ApiError(401, "Email already registered"));
-
   }
 
   const user = await User.create({
@@ -78,7 +77,7 @@ async function handleUserSignin(req, res) {
     delete userToSend.password;
 
     console.log("Signin successfull");
-
+    res.setHeader("Authorization", `Bearer ${token}`);
     res
       .status(200)
       .cookie("accessToken", token, {
@@ -91,4 +90,19 @@ async function handleUserSignin(req, res) {
   }
 }
 
-export { handleUserRegister, handleUserSignin };
+async function handleUserSignOut(req, res) {
+  if (req.user == null) {
+    return res.status(400).json(new ApiError(400, "User not signed in"));
+  }
+  res.clearCookie("accessToken",{
+    httpOnly: true,
+    secure: true,
+  });
+  
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, req.user, "Logout successfull"));
+}
+
+export { handleUserRegister, handleUserSignin, handleUserSignOut };

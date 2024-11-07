@@ -2,6 +2,7 @@ import express from "express";
 import {
   handleUserRegister,
   handleUserSignin,
+  handleUserSignOut,
 } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { ApiResponse } from "../utils/ApiResponse.util.js";
@@ -37,5 +38,7 @@ userRouter
       )
   )
   .post(handleUserSignin);
+
+userRouter.route("/signout").post(verifyJWT, handleUserSignOut)
 
 export { userRouter };

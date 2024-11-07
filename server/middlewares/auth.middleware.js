@@ -5,8 +5,9 @@ import {ApiError} from '../utils/ApiError.util.js'
 const verifyJWT = async function(req, res, next){
     try {
         console.log('verifying the user');
+        console.log(req.headers["authorization"]);
         
-        const token = req.cookies?.accessToken;
+        const token = req.cookies?.accessToken || req.headers["Authorization"].split("Bearer ")[1];
 
         
         if(!token){
@@ -29,7 +30,6 @@ const verifyJWT = async function(req, res, next){
         req.user = user;
         next(); 
     } catch (error) {
-        // return res.status(500).json(new ApiError(500, `Error verifying JWT: ${error.message}`));
         return res.status(500).json(new ApiError(500, `Error verifying JWT: ${error.message}`));
         
     }
