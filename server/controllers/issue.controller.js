@@ -12,7 +12,7 @@ async function handleIssueCreation(req, res) {
 
   // logged in user is rqe.user who is the creater of issues
   // and the person can assign it can by given at creation or later as well
-  if ([issueTitle].some((e) => e.trim() == undefined)) {
+  if ([issueTitle].some((e) => e.trim() == "")) {
     return res.status(400).json(new ApiError(400, "All fields are required"));
   }
 
@@ -203,9 +203,6 @@ async function handleDeleteIssue(req, res) {
     if (!issue) {
       return res.status(400).json(new ApiError(400, "Issue not found"));
     }
-
-    console.log(issueId);
-    console.log(issue);
 
     return res
       .status(200)

@@ -1,7 +1,7 @@
 import React from "react";
 import Issue from "./Issue";
 import { FaPlus } from "react-icons/fa";
-import CreateIssue from "../Project/CreateIssue";
+import CreateIssue from "./CreateIssue";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import {storeIssue} from '../redux/issueSlice'

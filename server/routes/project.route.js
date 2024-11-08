@@ -7,7 +7,7 @@ import {
   handleGetProjects,
   handleProjectCreation,
 } from "../controllers/project.controller.js";
-
+import { authorizedToAdmin } from "../middlewares/admin.auth.middleware.js";
 
 const projectRouter = Router();
 
@@ -17,7 +17,8 @@ projectRouter.route("/").get(handleGetProjects);
 
 projectRouter.route("/get-project-details").get(handleGetProjectDetails);
 
-projectRouter.route('/add-user-to-project').post(handleAddUserToProjectViaEmail);
-
+projectRouter
+  .route("/add-user-to-project")
+  .post(authorizedToAdmin, handleAddUserToProjectViaEmail);
 
 export { projectRouter };

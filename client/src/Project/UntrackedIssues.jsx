@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
 import IssueStatusSection from "../Issue/IssueStatusSection";
-import Issue from "../Issue/Issue";
 
 function UntrackedIssues() {
   const [untrackedIssues, setUntrackedIssues] = useState();
@@ -24,8 +23,6 @@ function UntrackedIssues() {
 
     getIssues();
   }, [todoCreateSection, doingCreateSection]);
-
-  console.log(untrackedIssues);
   
 
   return (
