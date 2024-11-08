@@ -30,7 +30,7 @@ function IssueStatusSection({
 
   return (
     <div
-      className="bg-gray-100 w-full h-full flex-grow"
+      className="p-1 bg-gray-100 w-full h-full flex-grow"
       onDragOver={(e) => {
         e.preventDefault();
       }}

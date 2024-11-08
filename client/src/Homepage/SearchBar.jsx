@@ -5,7 +5,7 @@ function SearchBar() {
     
   return (
     <>
-        <input type="text" placeholder='Search' className='text-sm p-2' onChange={(e)=> setSearchText(e.target.value)}/>
+        <input type="text" placeholder='Search' className='text-sm p-2 border' onChange={(e)=> setSearchText(e.target.value)}/>
     </>
   )
 }

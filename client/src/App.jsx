@@ -9,6 +9,7 @@ import InviteUserToProject from "./Project/InviteUserToProject.jsx";
 import { ToastContainer } from "react-toastify";
 import { Provider } from 'react-redux'
 import store from "./redux/store.js";
+import PricingHomePage from "./Pricing/PricingHomePage.jsx";
 
 
 
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "invite",
         element: <InviteUserToProject />
+      },
+      {
+        path: "pricing",
+        element: <PricingHomePage />
       },
     ],
   },

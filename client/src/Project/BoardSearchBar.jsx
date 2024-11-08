@@ -8,7 +8,7 @@ function BoardSearchBar() {
       <input
         type="text"
         placeholder="Search"
-        className="text-sm p-2"
+        className="text-sm p-2 border"
         onChange={(e) => setSearchText(e.target.value)}
       />
     </>

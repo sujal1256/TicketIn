@@ -6,7 +6,7 @@ function ProjectNavigator() {
   const project = useSelector(state => state.project.project);
 
   return (
-    <div className='flex text-sm gap-1'>
+    <div className='flex text-md gap-1'>
         <Link className="hover:underline" to={'/'}>Projects</Link>
         <p>/</p>
         <p>{project?.projectDetails?.projectName}</p>

@@ -33,7 +33,7 @@ function MemberIssues({ member }) {
   if (allIssues.length === 0) return null;
 
   return (
-    <div>
+    <div className="mb-12">
       <div className="flex gap-1 items-center mx-4 my-5">
         <Avatar
           name={member.userName}
@@ -49,7 +49,7 @@ function MemberIssues({ member }) {
         </p>
       </div>
       {/* issues */}
-      <div className="flex w-full justify-around px-28 gap-4 h-screen bg-red-300">
+      <div className="flex w-full justify-around px-28 gap-4 h-screen">
         {/* Todo */}
         <div className="flex-1 flex flex-col h-full">
           <IssueStatusSection
