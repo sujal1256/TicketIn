@@ -33,8 +33,6 @@ async function handleUserRegister(req, res) {
 
   const createdUser = await User.findById(user._id).select("-password");
 
-  console.log("User registered successfully");
-
   res
     .status(200)
     .json(new ApiResponse(200, createdUser, "User created successfully"));
@@ -73,18 +71,19 @@ async function handleUserSignin(req, res) {
 
     const userToSend = user.toObject();
     delete userToSend.password;
-
-    console.log("Signin successfull");
-    res.setHeader("Authorization", `Bearer ${token}`);
     res
       .status(200)
-      .cookie("accessToken", token, {
-        httpOnly: true,
-        secure: true,
-      })
-      .json(new ApiResponse(200, userToSend, "Signin successfull"));
+      .json(
+        new ApiResponse(
+          200,
+          { ...userToSend, accessToken: token },
+          "Signin successfull"
+        )
+      );
   } catch (error) {
-    console.log(`Error occurred while signin In\n`);
+    return res
+      .status(400)
+      .json(new ApiError(401, "Error occurred while signin In"));
   }
 }
 
@@ -92,11 +91,10 @@ async function handleUserSignOut(req, res) {
   if (req.user == null) {
     return res.status(400).json(new ApiError(400, "User not signed in"));
   }
-  res.clearCookie("accessToken",{
+  res.clearCookie("accessToken", {
     httpOnly: true,
     secure: true,
   });
-  
 
   return res
     .status(200)

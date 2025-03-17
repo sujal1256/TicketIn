@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import { connectToMongoDB } from "./utils/connectMongoDB.util.js";
-import cors from 'cors'
+import cors from "cors";
 import { userRouter } from "./routes/user.route.js";
 import cookieParser from "cookie-parser";
 import { verifyJWT } from "./middlewares/auth.middleware.js";
@@ -22,19 +22,26 @@ connectToMongoDB()
     console.log(`Error in connecting to MongoDB\n${err?.message}`);
   });
 
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
 // middleware
 app.use(express.json());
-app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // routes
 // FIXME: this is made here because I donot want to verify JWT here
-app.route('/invite').get(checkInvitedUser);
+app.route("/invite").get(checkInvitedUser);
 
 app.use("/api/v1/user", userRouter);
-app.use("/api/v1/project",verifyJWT, projectRouter);
-app.use("/api/v1/issue",verifyJWT, issueRouter);
+app.use("/api/v1/project", verifyJWT, projectRouter);
+app.use("/api/v1/issue", verifyJWT, issueRouter);
 
 app.listen(PORT, () => {
   console.log(

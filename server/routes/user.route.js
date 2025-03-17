@@ -34,11 +34,11 @@ userRouter
     res
       .status(200)
       .json(
-        new ApiResponse(200, req, user, "Check if the user is logged in or not")
+        new ApiResponse(200, req.user, "Check if the user is logged in or not")
       )
   )
   .post(handleUserSignin);
 
-userRouter.route("/signout").post(verifyJWT, handleUserSignOut)
+userRouter.route("/signout").get(verifyJWT, handleUserSignOut)
 
 export { userRouter };

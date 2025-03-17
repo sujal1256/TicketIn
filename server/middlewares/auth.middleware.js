@@ -4,12 +4,9 @@ import { ApiError } from "../utils/ApiError.util.js";
 
 const verifyJWT = async function (req, res, next) {
   try {
-    console.log("verifying the user");
-    console.log("Authrization header", req.headers["authorization"]);
-
     const token =
-      req.cookies?.accessToken ||
-      req.headers["Authorization"].split("Bearer ")[1];
+      req.cookies["accessToken"] ||
+      req.headers.authorization.split("Bearer ")[1];
 
     if (!token) {
       console.log("token is not found");
@@ -19,10 +16,7 @@ const verifyJWT = async function (req, res, next) {
         .json(new ApiError(401, "Unable to verify the token"));
     }
 
-    const decodedToken = await jwt.verify(
-      token,
-      process.env.ACESS_TOKEN_SECRET_KEY
-    );
+    const decodedToken = jwt.verify(token, process.env.ACESS_TOKEN_SECRET_KEY);
 
     if (!decodedToken) {
       console.log("token expired");
