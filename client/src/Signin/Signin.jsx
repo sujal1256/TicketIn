@@ -13,13 +13,23 @@ function Signin() {
     e.preventDefault();
 
     try {
-      const userloggedIn = await axios.post(`/api/v1/user/signin`, {
-        password,
-        email,
-      });
+      const userloggedIn = await axios.post(
+        import.meta.env.VITE_BACKEND_URL + `/api/v1/user/signin`,
+        {
+          password,
+          email,
+        },
+        {
+          withCredentials: true,
+        }
+      );
       console.log(userloggedIn);
+      document.cookie = "accessToken=" + userloggedIn?.data?.data?.accessToken;
+      localStorage.setItem(
+        "accessToken",
+        userloggedIn?.data?.data?.accessToken
+      );
       navigate("/");
-      window.location.reload();
     } catch (error) {
       console.log("Error occurred in signing in", error);
     }
@@ -32,11 +42,14 @@ function Signin() {
           <h1 className="text-4xl font-bold text-gray-700 mb-2">Sign In</h1>
           <p className="text-gray-600">Access your account to manage tickets</p>
         </div>
-        
+
         <div className="bg-white p-8 rounded-lg shadow-md">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Email address
               </label>
               <input
@@ -51,14 +64,20 @@ function Signin() {
                 placeholder="Enter your email"
               />
             </div>
-            
+
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Password
                 </label>
                 <div className="text-sm">
-                  <a href="#" className="font-medium text-purple-600 hover:text-purple-500">
+                  <a
+                    href="#"
+                    className="font-medium text-purple-600 hover:text-purple-500"
+                  >
                     Forgot password?
                   </a>
                 </div>
@@ -86,11 +105,14 @@ function Signin() {
             </div>
           </form>
         </div>
-        
+
         <div className="mt-6 text-center">
           <p className="text-gray-600">
             Don't have an account?{" "}
-            <a href="/signup" className="font-medium text-purple-600 hover:text-purple-500">
+            <a
+              href="/signup"
+              className="font-medium text-purple-600 hover:text-purple-500"
+            >
               Sign Up
             </a>
           </p>

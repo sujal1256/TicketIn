@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,15 +16,16 @@ function Signup() {
     e.preventDefault();
 
     try {
-      const createdUser = await axios.post(`/api/v1/user/signup`, {
-        username,
-        email,
-        password,
-        userRole,
-      });
-      toast.success(createdUser?.response?.data?.message || "Account created successfully!");
-      console.log(createdUser);
-      navigate('/signin');
+      await axios.post(
+        import.meta.env.VITE_BACKEND_URL + `/api/v1/user/signup`,
+        {
+          username,
+          email,
+          password,
+          userRole,
+        }
+      );
+      navigate("/signin");
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message);
       console.error("Error occurred in signing up", error);
@@ -33,7 +34,6 @@ function Signup() {
 
   return (
     <div className="flex flex-col bg-gray-50">
-      {/* Main content */}
       <main className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-md w-full space-y-8">
           <div>
@@ -44,11 +44,14 @@ function Signup() {
               Effortlessly manage tickets, track progress, and achieve goals
             </p>
           </div>
-          
+
           <div className="mt-8 bg-white py-8 px-4 shadow-lg sm:rounded-lg sm:px-10 border border-gray-200">
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="username"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Username
                 </label>
                 <div className="mt-1">
@@ -66,7 +69,10 @@ function Signup() {
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Email address
                 </label>
                 <div className="mt-1">
@@ -85,7 +91,10 @@ function Signup() {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Password
                 </label>
                 <div className="mt-1">
@@ -127,7 +136,7 @@ function Signup() {
 
               <div className="mt-6">
                 <button
-                  onClick={() => navigate('/login')}
+                  onClick={() => navigate("/login")}
                   className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
                 >
                   Sign In
