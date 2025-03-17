@@ -19,8 +19,9 @@ function Issue({ e, userName, issueId }) {
     // Add your delete logic here
 
     try {
-      const response = await axios.post("/api/v1/issue/delete-issue", {
+      const response = await axios.post(import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/delete-issue", {
         issueId,
+        withCredentials: true,
       });
       // nothing to do with storage only did to update the frontend
       dispatch(storeIssue([]));

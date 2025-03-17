@@ -9,20 +9,21 @@ function CreateIssue({ issueStatus, member, setCreateSection }) {
   async function handleIssueCreation(e) {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/v1/issue/create-issue", {
-        issueTitle,
-        issueStatus,
-        projectId: searchParams.get('q'),
-        assignedTo: member?.userId
-
-      }).catch(e => {
-        console.log(e);
-        
-      });
+      const response = await axios
+        .post(import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/create-issue", {
+          issueTitle,
+          issueStatus,
+          projectId: searchParams.get("q"),
+          assignedTo: member?.userId,
+          withCredentials: true,
+        })
+        .catch((e) => {
+          console.log(e);
+        });
       console.log("Issue created successfully");
     } catch (error) {
-        console.log(error);
-        
+      console.log(error);
+
       console.log("Error in posting data", error.message);
     }
 
@@ -43,7 +44,6 @@ function CreateIssue({ issueStatus, member, setCreateSection }) {
           Create
         </button>
       </div>
-      
     </form>
   );
 }

@@ -9,10 +9,13 @@ function useCheckSignedIn() {
 
   useEffect(() => {
     async function checkUserIfSignedInOrNot() {
-      const response = await axios.get("/api/v1/user").catch((error) => {
-        console.log(error);
-        return error;
-      });
+      const response = await axios
+        .get(import.meta.env.VITE_BACKEND_URL + "/api/v1/user", {
+          withCredentials: true,
+        })
+        .catch((error) => {
+          return error;
+        });
       setLoggedInResponse({
         userLoggedIn: response.status >= 200 && response.status < 300,
         user: response,

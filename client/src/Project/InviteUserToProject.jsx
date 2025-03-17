@@ -9,7 +9,7 @@ function InviteUserToProject() {
   
   useEffect(() => {
     async function invite() {
-      const response = await axios.get("/api/v1/invite", {
+      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/v1/invite", {
         params: {
           token: searchParams.get("token"),
         },

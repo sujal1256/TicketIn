@@ -24,8 +24,11 @@ function Navbar() {
 
   async function handleLogout() {
     try {
-      const response = await axios.post("api/v1/user/signout");
-      window.location.reload();
+      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/v1/user/signout",{
+        withCredentials: true,
+      });
+      localStorage.setItem("accessToken","");
+      document.cookie = `accessToken=""`
     } catch (error) {
       console.error("Error while logging out", error);
     }
@@ -44,36 +47,30 @@ function Navbar() {
                 alt="TicketIn Logo"
               />
             </div>
-            
+
             {/* Desktop Navigation */}
             <div className="hidden md:ml-8 md:flex md:space-x-8">
-              <Link 
-                to={"/"} 
+              <Link
+                to={"/"}
                 className="border-transparent text-gray-700 hover:text-purple-700 inline-flex items-center px-1 pt-1 border-b-2 hover:border-purple-500 text-sm font-medium"
               >
                 Home
               </Link>
-              <Link 
+              <Link
                 to={`${project ? `/pricing?q=${project}` : "/pricing"}`}
                 className="border-transparent text-gray-700 hover:text-purple-700 inline-flex items-center px-1 pt-1 border-b-2 hover:border-purple-500 text-sm font-medium"
               >
                 Pricing
               </Link>
-              <Link 
-                to={"/projects"} 
-                className="border-transparent text-gray-700 hover:text-purple-700 inline-flex items-center px-1 pt-1 border-b-2 hover:border-purple-500 text-sm font-medium"
+              <Link
+                to={"/create-project"}
+                className="bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-md px-4 py-2 inline-flex items-center transition-colors duration-200 shadow-sm"
               >
-                Projects
-              </Link>
-              <Link 
-                to={"/dashboard"} 
-                className="border-transparent text-gray-700 hover:text-purple-700 inline-flex items-center px-1 pt-1 border-b-2 hover:border-purple-500 text-sm font-medium"
-              >
-                Dashboard
+                <span>Create</span>
               </Link>
             </div>
           </div>
-          
+
           {/* Right side navigation */}
           <div className="flex items-center">
             {/* Search area - Desktop */}
@@ -89,7 +86,7 @@ function Navbar() {
                 />
               </div>
             </div>
-            
+
             {loggedInResponse.userLoggedIn ? (
               <div className="flex items-center space-x-4">
                 {/* Upgrade button */}
@@ -101,7 +98,7 @@ function Navbar() {
                     Upgrade
                   </Link>
                 )}
-                
+
                 {/* Avatar with Dropdown */}
                 <div className="relative ml-3">
                   <div>
@@ -110,7 +107,9 @@ function Navbar() {
                       className="flex items-center max-w-xs rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
                     >
                       <Avatar
-                        name={loggedInResponse.user?.data?.data?.username || "User"}
+                        name={
+                          loggedInResponse.user?.data?.data?.username || "User"
+                        }
                         size="40"
                         round={true}
                         className="cursor-pointer"
@@ -118,16 +117,18 @@ function Navbar() {
                       <IoMdArrowDropdown className="ml-1 text-gray-500" />
                     </button>
                   </div>
-                  
+
                   {/* Dropdown panel */}
                   {showDropdown && (
                     <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 z-10">
                       <div className="px-4 py-3">
                         <p className="text-sm font-medium text-gray-900">
-                          {loggedInResponse.user?.data?.data?.username || "User"}
+                          {loggedInResponse.user?.data?.data?.username ||
+                            "User"}
                         </p>
                         <p className="text-sm text-gray-500 truncate">
-                          {loggedInResponse.user?.data?.data?.email || "user@example.com"}
+                          {loggedInResponse.user?.data?.data?.email ||
+                            "user@example.com"}
                         </p>
                       </div>
                       <div className="border-t border-gray-100"></div>
@@ -169,7 +170,7 @@ function Navbar() {
                 </Link>
               </div>
             )}
-            
+
             {/* Mobile menu button */}
             <div className="flex md:hidden ml-4">
               <button
@@ -182,7 +183,7 @@ function Navbar() {
           </div>
         </div>
       </div>
-      
+
       {/* Mobile menu, show/hide based on menu state */}
       {showMobileMenu && (
         <div className="md:hidden">
@@ -199,21 +200,9 @@ function Navbar() {
             >
               Pricing
             </Link>
-            <Link
-              to="/projects"
-              className="block pl-3 pr-4 py-2 border-l-4 text-base font-medium border-transparent text-gray-600 hover:bg-gray-50 hover:border-purple-300 hover:text-gray-800"
-            >
-              Projects
-            </Link>
-            <Link
-              to="/dashboard"
-              className="block pl-3 pr-4 py-2 border-l-4 text-base font-medium border-transparent text-gray-600 hover:bg-gray-50 hover:border-purple-300 hover:text-gray-800"
-            >
-              Dashboard
-            </Link>
           </div>
-          
-          {/* Mobile search */}
+
+          {/* Mobile search
           <div className="pt-2 pb-3 px-4">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -225,7 +214,7 @@ function Navbar() {
                 className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 sm:text-sm"
               />
             </div>
-          </div>
+          </div> */}
         </div>
       )}
     </nav>

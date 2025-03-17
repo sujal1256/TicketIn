@@ -13,10 +13,11 @@ function ProjectPage() {
   useEffect(() => {
     async function getProjectDetails() {
       const response = await axios
-        .get("/api/v1/project/get-project-details", {
+        .get(import.meta.env.VITE_BACKEND_URL + "/api/v1/project/get-project-details", {
           params: {
             q: searchParams.get("q"),
           },
+          withCredentials: true,
         })
         .catch((error) => {
           console.log("Error while getting project data" + error.message);

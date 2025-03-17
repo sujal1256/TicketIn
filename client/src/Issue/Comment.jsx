@@ -13,11 +13,15 @@ function Comment({ comment }) {
   const [editedText, setEditedText] = useState(comment?.commentText);
 
   async function handleDeleteComment() {
-    const response = await axios.post("/api/v1/issue/comment/delete-comment", {
-      commentId: comment?._id,
-      issueId: searchParams.get("selectedIssue"),
-      projectId: searchParams.get("q"),
-    });
+    const response = await axios.post(
+      import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/comment/delete-comment",
+      {
+        commentId: comment?._id,
+        issueId: searchParams.get("selectedIssue"),
+        projectId: searchParams.get("q"),
+        accessToken: localStorage.getItem("accessToken"),
+      }
+    );
 
     dispatch(
       storeComments(
@@ -27,12 +31,16 @@ function Comment({ comment }) {
   }
 
   async function handleEditComment() {
-    const response = await axios.post("/api/v1/issue/comment/update-comment", {
-      commentId: comment?._id,
-      issueId: searchParams.get("selectedIssue"),
-      projectId: searchParams.get("q"),
-      newCommentText: editedText,
-    });
+    const response = await axios.post(
+      import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/comment/update-comment",
+      {
+        commentId: comment?._id,
+        issueId: searchParams.get("selectedIssue"),
+        projectId: searchParams.get("q"),
+        newCommentText: editedText,
+        accessToken: localStorage.getItem("accessToken"),
+      }
+    );
 
     if (response?.data?.data) {
       // Update the comment in the redux store

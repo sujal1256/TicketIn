@@ -18,7 +18,7 @@ function IssueStatusSection({
     const issueId = e.dataTransfer.getData("issue");
     const issue = await allIssues.find((e) => e._id == issueId);
 
-    const response = await axios.post("/api/v1/issue/update-issue", {
+    const response = await axios.post(import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/update-issue", {
       ...issue,
       issueStatus: issueStatus,
       issueId,

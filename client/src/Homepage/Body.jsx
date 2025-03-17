@@ -5,7 +5,7 @@ import Mainpage from "./Mainpage.jsx";
 function Body() {
   return (
     <div className="flex">
-      <Sidebar />
+      {/* <Sidebar /> */}
       <Mainpage />
     </div>
   );

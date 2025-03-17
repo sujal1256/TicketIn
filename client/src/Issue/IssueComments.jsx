@@ -26,7 +26,7 @@ function IssueComments() {
       };
 
       const response = await axios.post(
-        "/api/v1/issue/comment/add-comment",
+        import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/comment/add-comment",
         newComment
       );
       console.log(response?.data?.data);

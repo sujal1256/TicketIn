@@ -13,24 +13,28 @@ function IssueDetails() {
   const projectId = searchParams.get("q");
   const dispatch = useDispatch();
 
-  const project = useSelector(state => state.project.project);
-  const comments = useSelector(state => state.comments.comments);
-  const issue = useSelector(state => state.issue.issue);
+  const project = useSelector((state) => state.project.project);
+  const comments = useSelector((state) => state.comments.comments);
+  const issue = useSelector((state) => state.issue.issue);
 
   useEffect(() => {
     async function getIssueDetails() {
-      const response = await axios.get("/api/v1/issue/get-issue-details", {
-        params: {
-          projectId,
-          selectedIssue,
-        },
-      });
+      const response = await axios.get(
+        import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/get-issue-details",
+        {
+          params: {
+            projectId,
+            selectedIssue,
+          },
+        }
+      );
       dispatch(storeIssue(response?.data?.data.issue));
     }
 
     async function getIssueComments() {
       const response = await axios.get(
-        "/api/v1/issue/comment/get-all-comments",
+        import.meta.env.VITE_BACKEND_URL +
+          "/api/v1/issue/comment/get-all-comments",
         {
           params: { issueId: selectedIssue, projectId },
         }

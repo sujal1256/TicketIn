@@ -22,7 +22,7 @@ function IssueContent() {
 
   async function handleSaveData() {
     try {
-      const response = await axios.post("/api/v1/issue/update-issue", {
+      const response = await axios.post(import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/update-issue", {
         ...issue?.issue,
         issueTitle: title,
         issueDescription: description,

@@ -13,7 +13,7 @@ function AddUserMenu() {
     const projectID = searchParams.get("q");
 
     const response = await axios
-      .post("api/v1/project/add-user-to-project", {
+      .post(import.meta.env.VITE_BACKEND_URL + "/api/v1/project/add-user-to-project", {
         projectId: projectID.trim(),
         email: email.trim(),
       })

@@ -17,7 +17,7 @@ function MemberIssues({ member }) {
 
   useEffect(() => {
     async function getIssues() {
-      const response = await axios.get("/api/v1/issue/get-issues", {
+      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/get-issues", {
         params: {
           projectId: searchParams.get("q"),
           memberId: member?.userId,

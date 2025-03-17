@@ -4,17 +4,17 @@ import { useNavigate } from "react-router-dom";
 
 const CreateProject = () => {
   const navigate = useNavigate();
-  
-  // State for form inputs
+
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
   const [projectOwner, setProjectOwner] = useState("");
-  const [startDate, setStartDate] = useState("");
+  const [startDate, setStartDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
   const [endDate, setEndDate] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -30,7 +30,7 @@ const CreateProject = () => {
 
     try {
       const response = await axios.post(
-        "/api/v1/project/create-project",
+        import.meta.env.VITE_BACKEND_URL + "/api/v1/project/create-project",
         projectData
       );
       console.log("Project created successfully:", response.data);
@@ -62,7 +62,7 @@ const CreateProject = () => {
               {errorMessage}
             </div>
           )}
-          
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Project Name */}
             <div>
@@ -111,7 +111,6 @@ const CreateProject = () => {
 
             {/* Date Range */}
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              {/* Start Date */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Start Date

@@ -9,28 +9,35 @@ import { FaTrashAlt } from "react-icons/fa";
 function IssueAssignedDetails() {
   const issue = useSelector((state) => state.issue.issue);
   const project = useSelector((state) => state.project.project);
-  const [dropdownOpen, setDropdownOpen] = useState(false); 
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   async function handleIssueStatusChange(e) {
-    const response = await axios.post("/api/v1/issue/update-issue", {
-      ...issue.issue,
-      issueStatus: e.target.value,
-      issueId: searchParams.get("selectedIssue"),
-    });
+    const response = await axios.post(
+      import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/update-issue",
+      {
+        ...issue.issue,
+        issueStatus: e.target.value,
+        issueId: searchParams.get("selectedIssue"),
+        withCredentials: true,
+      }
+    );
 
     dispatch(storeIssue(response?.data?.data));
   }
 
   async function handleAssigneeChange(newAssignee) {
-    const response = await axios.post("/api/v1/issue/update-issue", {
-      ...issue.issue,
-      assignedTo: newAssignee.userId,
-      issueId: searchParams.get("selectedIssue"),
-    });
-    console.log(response?.data?.data);
+    const response = await axios.post(
+      import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/update-issue",
+      {
+        ...issue.issue,
+        assignedTo: newAssignee.userId,
+        issueId: searchParams.get("selectedIssue"),
+        withCredentials: true,
+      }
+    );
 
     setDropdownOpen(false); // Close dropdown
     dispatch(storeIssue(response?.data?.data));
@@ -41,13 +48,16 @@ function IssueAssignedDetails() {
     // Add your delete logic here
 
     try {
-      const response = await axios.post("/api/v1/issue/delete-issue", {
-        issueId: searchParams.get("selectedIssue"),
-      });
+      const response = await axios.post(
+        import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/delete-issue",
+        {
+          issueId: searchParams.get("selectedIssue"),
+        }
+      );
       // nothing to do with storage only did to update the frontend
       dispatch(storeIssue([]));
       console.log(response);
-      navigate("/project?q=" + searchParams.get('q'))
+      navigate("/project?q=" + searchParams.get("q"));
     } catch (error) {
       console.log("Error in deleting the issue", error?.message);
     }
