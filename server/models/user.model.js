@@ -20,12 +20,7 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
 
-    userRole: {
-      type: String,
-      enum: ["User", "Admin"],
-      default: "User",
-    },
-    //   projects: [
+    //   projecs: [
     //     {
     //         type:
     //     }

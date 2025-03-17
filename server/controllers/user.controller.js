@@ -3,11 +3,10 @@ import { ApiError } from "../utils/ApiError.util.js";
 import { ApiResponse } from "../utils/ApiResponse.util.js";
 
 async function handleUserRegister(req, res) {
-  let { username, email, password, userRole } = req.body;
+  let { username, email, password } = req.body;
   username = username?.trim();
   email = email?.trim();
   password = password?.trim();
-  userRole = userRole?.trim();
 
   if ([username, email, password].some((e) => e == undefined)) {
     return res
@@ -30,7 +29,6 @@ async function handleUserRegister(req, res) {
     username,
     email,
     password,
-    userRole,
   });
 
   const createdUser = await User.findById(user._id).select("-password");

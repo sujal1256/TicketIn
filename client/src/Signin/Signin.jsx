@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "../firebase/firebase";
 
 function Signin() {
   // State for email and password
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const backendURL = "http://localhost:5500";
   const navigate = useNavigate();
 
   // Handle form submission
@@ -24,49 +21,23 @@ function Signin() {
       navigate("/");
       window.location.reload();
     } catch (error) {
-      console.log("Error occurred in signin in", error);
-    }
-    // Add authentication logic here
-  };
-
-  const handleGoogleSignIn = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      console.log("result", result?.user);
-      
-      console.log(result?.user?.uid, result?.user?.email);
-      
-      const userloggedIn = await axios.post(`/api/v1/user/signin`, {
-        password: result?.user?.uid,
-        email: result?.user?.email,
-      });
-
-      // Optionally, you can send this info to your backend for JWT handling
-      // const { displayName, email, photoURL, uid } = result.user;
-      // await axios.post(`${backendURL}/api/v1/user/google-signin`, { displayName, email, photoURL, uid });
-      
-      console.log(userloggedIn);
-      
-
-      navigate('/');
-      window.location.reload();
-    } catch (error) {
-      console.error('Google Sign-In Error:', error);
+      console.log("Error occurred in signing in", error);
     }
   };
 
-  console.log("cookie", document.cookie);
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white shadow-lg rounded-lg">
-        <h2 className="text-2xl font-bold text-center text-gray-900">
-          Sign In
-        </h2>
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-          <div className="rounded-md shadow-sm">
+    <div className="flex items-center justify-center py-24 bg-gray-50">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-bold text-gray-700 mb-2">Sign In</h1>
+          <p className="text-gray-600">Access your account to manage tickets</p>
+        </div>
+        
+        <div className="bg-white p-8 rounded-lg shadow-md">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="sr-only">
-                Email
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                Email address
               </label>
               <input
                 id="email"
@@ -76,14 +47,22 @@ function Signin() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="relative block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                placeholder="Email"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                placeholder="Enter your email"
               />
             </div>
-            <div className="mt-4">
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
+            
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  Password
+                </label>
+                <div className="text-sm">
+                  <a href="#" className="font-medium text-purple-600 hover:text-purple-500">
+                    Forgot password?
+                  </a>
+                </div>
+              </div>
               <input
                 id="password"
                 name="password"
@@ -92,41 +71,29 @@ function Signin() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="relative block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                placeholder="Password"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                placeholder="Enter your password"
               />
             </div>
-          </div>
 
-          <div className="flex items-center justify-between">
-            <div className="text-sm">
-              <a
-                href="#"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
+            <div>
+              <button
+                type="submit"
+                className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-150 ease-in-out"
               >
-                Forgot your password?
-              </a>
+                Sign In
+              </button>
             </div>
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              className="group relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Sign In
-            </button>
-          </div>
-        </form>
-
-        {/* Google Sign-In Button */}
-        <div className="mt-4">
-          <button
-            onClick={handleGoogleSignIn}
-            className="group relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-red-500 border border-transparent rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400"
-          >
-            Sign in with Google
-          </button>
+          </form>
+        </div>
+        
+        <div className="mt-6 text-center">
+          <p className="text-gray-600">
+            Don't have an account?{" "}
+            <a href="/signup" className="font-medium text-purple-600 hover:text-purple-500">
+              Sign Up
+            </a>
+          </p>
         </div>
       </div>
     </div>
