@@ -17,12 +17,19 @@ function MemberIssues({ member }) {
 
   useEffect(() => {
     async function getIssues() {
-      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/get-issues", {
-        params: {
-          projectId: searchParams.get("q"),
-          memberId: member?.userId,
-        },
-      });
+      const response = await axios.get(
+        import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/get-issues",
+        {
+          params: {
+            projectId: searchParams.get("q"),
+            memberId: member?.userId,
+          },
+          withCredentials: true,
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("accessToken"),
+          },
+        }
+      );
 
       setAllIssues(response?.data?.data?.issues);
     }

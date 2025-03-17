@@ -12,18 +12,24 @@ function UntrackedIssues() {
 
   useEffect(() => {
     async function getIssues() {
-      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/get-untracked-issues", {
-        params: {
-          projectId: searchParams.get("q"),
-        },
-      });
+      const response = await axios.get(
+        import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/get-untracked-issues",
+        {
+          params: {
+            projectId: searchParams.get("q"),
+          },
+          withCredentials: true,
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("accessToken"),
+          },
+        }
+      );
 
       setUntrackedIssues(response?.data?.data?.issues);
     }
 
     getIssues();
   }, [todoCreateSection, doingCreateSection]);
-  
 
   return (
     <div>

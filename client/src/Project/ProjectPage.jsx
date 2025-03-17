@@ -18,6 +18,7 @@ function ProjectPage() {
             q: searchParams.get("q"),
           },
           withCredentials: true,
+          
         })
         .catch((error) => {
           console.log("Error while getting project data" + error.message);
