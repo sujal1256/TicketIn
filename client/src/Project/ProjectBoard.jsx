@@ -16,25 +16,27 @@ function ProjectBoard() {
   const [searchParams] = useSearchParams();
   const selectedIssue = searchParams.get("selectedIssue");
 
-  const statusCSS = "bg-gray-200 border border-gray-200 w-full text-center py-2 rounded-lg shadow-sm"
   return (
-    <div className="border-l border-gray-200 bg-white w-full relative p-6">
+    <div className="border-l border-gray-200 bg-white w-full relative p-6 flex-shrink-0">
       {selectedIssue && <IssueDetails />}
 
       <ProjectNavigator />
 
-      <div className="flex justify-between items-center rounded-lg shadow-sm mt-4">
+      <div className="flex justify-between items-center mt-4">
         <div className="flex items-center gap-6">
           <BoardSearchBar />
 
           <div className="flex items-center gap-3">
-            {project?.projectDetails?.members.map((member, index) => (
+            {project?.projectDetails?.members?.map((member, index) => (
               <UserComponent key={index} {...member} />
             ))}
           </div>
 
           <div className="relative">
-            <button onClick={() => setAddUserMenu(!addUserMenu)}>
+            <button 
+              onClick={() => setAddUserMenu(!addUserMenu)}
+              className="focus:outline-none"
+            >
               <FaUserPlus className="text-gray-600 hover:text-blue-600 p-2 w-10 h-10 rounded-full transition-colors duration-200 cursor-pointer" />
             </button>
             {addUserMenu && (
@@ -56,22 +58,39 @@ function ProjectBoard() {
               <option value="assignee">Assignee</option>
             </select>
           </div>
-          <button>
+          <button className="focus:outline-none">
             <IoIosSettings className="text-gray-600 hover:text-blue-600 p-2 w-10 h-10 rounded-full transition-colors duration-200 cursor-pointer" />
           </button>
         </div>
       </div>
 
       {/* Board Columns */}
-      <div className="flex justify-around gap-4 mt-8">
-        <div className={statusCSS}>
-          <p className="text-gray-800 font-semibold">To Do</p>
+      <div className="flex gap-4 mt-8">
+        <div className="flex-1">
+          <div className="bg-gray-100 border border-gray-200 w-full text-center py-2 rounded-lg shadow-sm">
+            <p className="text-gray-800 font-semibold">To Do</p>
+          </div>
+          <div className="mt-4 space-y-3">
+            {/* Task cards will be rendered by BoardTasks */}
+          </div>
         </div>
-        <div className={statusCSS}>
-          <p className="text-gray-800 font-semibold">Doing</p>
+        
+        <div className="flex-1">
+          <div className="bg-gray-100 border border-gray-200 w-full text-center py-2 rounded-lg shadow-sm">
+            <p className="text-gray-800 font-semibold">Doing</p>
+          </div>
+          <div className="mt-4 space-y-3">
+            {/* Task cards will be rendered by BoardTasks */}
+          </div>
         </div>
-        <div className={statusCSS}>
-          <p className="text-gray-800 font-semibold">Done</p>
+        
+        <div className="flex-1">
+          <div className="bg-gray-100 border border-gray-200 w-full text-center py-2 rounded-lg shadow-sm">
+            <p className="text-gray-800 font-semibold">Done</p>
+          </div>
+          <div className="mt-4 space-y-3">
+            {/* Task cards will be rendered by BoardTasks */}
+          </div>
         </div>
       </div>
 

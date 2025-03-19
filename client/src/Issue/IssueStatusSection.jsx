@@ -4,7 +4,7 @@ import { FaPlus } from "react-icons/fa";
 import CreateIssue from "./CreateIssue";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import {storeIssue} from '../redux/issueSlice'
+import { storeIssue } from "../redux/issueSlice";
 
 function IssueStatusSection({
   allIssues,
@@ -14,48 +14,77 @@ function IssueStatusSection({
   issueStatus,
 }) {
   const dispatch = useDispatch();
+  
   async function handleDropEvent(e) {
-    const issueId = e.dataTransfer.getData("issue");
-    const issue = await allIssues.find((e) => e._id == issueId);
-
-    const response = await axios.post(import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/update-issue", {
-      ...issue,
-      issueStatus: issueStatus,
-      issueId,
-    });
-    console.log(response?.data?.data);
-
-    dispatch(storeIssue(response?.data?.data));
+    try {
+      e.preventDefault();
+      const issueId = e.dataTransfer.getData("issue");
+      const issue = allIssues.find((e) => e._id === issueId);
+      
+      if (!issue) return;
+      
+      const response = await axios.post(
+        import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/update-issue",
+        {
+          ...issue,
+          issueStatus: issueStatus,
+          issueId,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("accessToken"),
+          },
+          withCredentials: true,
+        }
+      );
+      
+      if (response?.data?.data) {
+        dispatch(storeIssue(response.data.data));
+      }
+    } catch (error) {
+      console.error("Error updating issue status:", error);
+    }
   }
+
+  const filteredIssues = allIssues?.filter(e => e.issueStatus === issueStatus) || [];
 
   return (
     <div
-      className="p-1 bg-gray-100 w-full h-full flex-grow"
+      className="w-full min-h-32 flex flex-col rounded-md"
       onDragOver={(e) => {
         e.preventDefault();
       }}
       onDrop={handleDropEvent}
     >
-      {allIssues
-        ?.filter((e) => e.issueStatus == issueStatus)
-        .map((e) => {
-          return <Issue e={e} userName={member.userName} key={e._id} issueId={e._id} />;
-        })}
+      <div className="space-y-1 mb-2">
+        {filteredIssues.map((issue) => (
+          <Issue
+            e={issue}
+            userName={member.userName}
+            key={issue._id}
+            issueId={issue._id}
+          />
+        ))}
+      </div>
 
-      {issueStatus != "Done" && !createSection && (
-        <div onClick={() => setCreateSection(true)}>
-          <div className="w-full m-h-16 p-2 shadow-gray-200 mb-1 hover:bg-gray-300 cursor-pointer flex items-center gap-1 rounded-lg">
-            <FaPlus />
-            Create Issue
-          </div>
+      {issueStatus !== "Done" && (
+        <div>
+          {!createSection ? (
+            <div 
+              onClick={() => setCreateSection?.(true)}
+              className="flex items-center gap-2 mt-2 p-2.5 text-gray-600 bg-white border border-gray-200 rounded-md hover:bg-gray-50 cursor-pointer transition-colors duration-150 shadow-sm"
+            >
+              <FaPlus className="text-gray-500" size={12} />
+              <span className="text-sm font-medium">Create Issue</span>
+            </div>
+          ) : (
+            <CreateIssue
+              member={member}
+              issueStatus={issueStatus}
+              setCreateSection={setCreateSection}
+            />
+          )}
         </div>
-      )}
-      {issueStatus != "Done" && createSection && (
-        <CreateIssue
-          member={member}
-          issueStatus={issueStatus}
-          setCreateSection={setCreateSection}
-        />
       )}
     </div>
   );

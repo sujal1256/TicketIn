@@ -5,69 +5,91 @@ import { useSearchParams } from "react-router-dom";
 import IssueStatusSection from "../Issue/IssueStatusSection";
 
 function UntrackedIssues() {
-  const [untrackedIssues, setUntrackedIssues] = useState();
+  const [untrackedIssues, setUntrackedIssues] = useState([]);
   const [searchParams] = useSearchParams();
-  const [todoCreateSection, setTodoCreateSection] = useState();
-  const [doingCreateSection, setDoingCreateSection] = useState();
+  const [todoCreateSection, setTodoCreateSection] = useState(false);
+  const [doingCreateSection, setDoingCreateSection] = useState(false);
 
   useEffect(() => {
     async function getIssues() {
-      const response = await axios.get(
-        import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/get-untracked-issues",
-        {
-          params: {
-            projectId: searchParams.get("q"),
-          },
-          withCredentials: true,
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("accessToken"),
-          },
-        }
-      );
+      try {
+        const response = await axios.get(
+          import.meta.env.VITE_BACKEND_URL + "/api/v1/issue/get-untracked-issues",
+          {
+            params: {
+              projectId: searchParams.get("q"),
+            },
+            withCredentials: true,
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("accessToken"),
+            },
+          }
+        );
 
-      setUntrackedIssues(response?.data?.data?.issues);
+        setUntrackedIssues(response?.data?.data?.issues || []);
+      } catch (error) {
+        console.error("Error fetching untracked issues:", error);
+      }
     }
 
     getIssues();
-  }, [todoCreateSection, doingCreateSection]);
+  }, [todoCreateSection, doingCreateSection, searchParams]);
+
+  if (!untrackedIssues || untrackedIssues.length === 0) return null;
 
   return (
-    <div>
-      <div className="flex gap-1 items-center mx-4 my-5">
-        <FaUser />
-        <p>
-          Untracked
-          <span className="text-sx text-gray-400 ">
-            ({untrackedIssues?.length} issues)
+    <div className="mb-6">
+      {/* Untracked header */}
+      <div className="flex gap-2 items-center py-3 px-4 bg-gray-50 rounded-lg shadow-sm mb-4">
+        <div className="bg-gray-200 p-1.5 rounded-full">
+          <FaUser className="text-gray-600" />
+        </div>
+        <div className="flex items-baseline">
+          <p className="font-medium text-gray-700">Untracked</p>
+          <span className="text-xs text-gray-500 ml-2">
+            ({untrackedIssues?.length || 0} issues)
           </span>
-        </p>
+        </div>
       </div>
-      {/* issues */}
-      <div className="flex w-full justify-around px-28 gap-4 ">
-        {/* todo */}
-        <IssueStatusSection
-          allIssues={untrackedIssues}
-          member={{ userName: "untracked" }}
-          issueStatus={"Todo"}
-          createSection={todoCreateSection}
-          setCreateSection={setTodoCreateSection}
-        />
 
-        {/* doing */}
-        <IssueStatusSection
-          allIssues={untrackedIssues}
-          member={{ userName: "untracked" }}
-          issueStatus={"Doing"}
-          createSection={doingCreateSection}
-          setCreateSection={setDoingCreateSection}
-        />
+      {/* Issues board */}
+      <div className="flex gap-4">
+        {/* Todo column */}
+        <div className="flex-1 bg-gray-100 rounded">
+          <div className="space-y-3">
+            <IssueStatusSection
+              allIssues={untrackedIssues}
+              member={{ userName: "untracked" }}
+              issueStatus={"Todo"}
+              createSection={todoCreateSection}
+              setCreateSection={setTodoCreateSection}
+            />
+          </div>
+        </div>
 
-        {/* done */}
-        <IssueStatusSection
-          allIssues={untrackedIssues}
-          member={{ userName: "untracked" }}
-          issueStatus={"Done"}
-        />
+        {/* Doing column */}
+        <div className="flex-1 bg-gray-100 rounded">
+          <div className="space-y-3">
+            <IssueStatusSection
+              allIssues={untrackedIssues}
+              member={{ userName: "untracked" }}
+              issueStatus={"Doing"}
+              createSection={doingCreateSection}
+              setCreateSection={setDoingCreateSection}
+            />
+          </div>
+        </div>
+
+        {/* Done column */}
+        <div className="flex-1 bg-gray-100 rounded">
+          <div className="space-y-3">
+            <IssueStatusSection
+              allIssues={untrackedIssues}
+              member={{ userName: "untracked" }}
+              issueStatus={"Done"}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
