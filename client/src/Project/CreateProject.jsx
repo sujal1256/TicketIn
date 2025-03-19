@@ -31,7 +31,12 @@ const CreateProject = () => {
     try {
       const response = await axios.post(
         import.meta.env.VITE_BACKEND_URL + "/api/v1/project/create-project",
-        projectData
+        projectData,{
+          withCredentials: true,
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("accessToken"),
+          },
+        }
       );
       console.log("Project created successfully:", response.data);
       // Redirect to the main page or project detail page

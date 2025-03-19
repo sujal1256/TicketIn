@@ -1,3 +1,4 @@
+import Project from "../models/project.model.js";
 import User from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.util.js";
 import { ApiResponse } from "../utils/ApiResponse.util.js";
@@ -101,4 +102,23 @@ async function handleUserSignOut(req, res) {
     .json(new ApiResponse(200, req.user, "Logout successfull"));
 }
 
-export { handleUserRegister, handleUserSignin, handleUserSignOut };
+async function handleGetProjects(req, res) {
+  try {
+    const user = req.user;    
+    if (!user) {
+      return res.status(400).json(new ApiError(400, "User not found"));
+    }
+
+    const userId = user._id;
+
+    const projects = await Project.find({ projectOwner: userId });
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, projects, "Projects created by user"));
+  } catch (error) {
+    return res.status(400).json(new ApiError(400, "Projects Not found"));
+  }
+}
+
+export { handleUserRegister, handleUserSignin, handleUserSignOut, handleGetProjects };

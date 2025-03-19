@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.util.js";
+import { ApiResponse } from "../utils/ApiResponse.util.js";
 
 const verifyJWT = async function (req, res, next) {
   try {
@@ -16,7 +17,8 @@ const verifyJWT = async function (req, res, next) {
         .json(new ApiError(401, "Unable to verify the token"));
     }
 
-    const decodedToken = jwt.verify(token, process.env.ACESS_TOKEN_SECRET_KEY);
+    const decodedToken = jwt
+      .verify(token, process.env.ACESS_TOKEN_SECRET_KEY)
 
     if (!decodedToken) {
       console.log("token expired");
@@ -35,8 +37,8 @@ const verifyJWT = async function (req, res, next) {
     next();
   } catch (error) {
     return res
-      .status(500)
-      .json(new ApiError(500, `Error verifying JWT: ${error.message}`));
+      .status(400)
+      .json(new ApiError(400, `Error verifying JWT: ${error.message}`));
   }
 };
 

@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../redux/userSlice";
+
 
 function Signin() {
   // State for email and password
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -23,12 +27,12 @@ function Signin() {
           withCredentials: true,
         }
       );
-      console.log(userloggedIn);
       document.cookie = "accessToken=" + userloggedIn?.data?.data?.accessToken;
       localStorage.setItem(
         "accessToken",
         userloggedIn?.data?.data?.accessToken
       );
+      dispatch(addUser(userloggedIn?.data?.data));
       navigate("/");
     } catch (error) {
       console.log("Error occurred in signing in", error);

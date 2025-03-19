@@ -64,25 +64,6 @@ async function handleProjectCreation(req, res) {
   }
 }
 
-async function handleGetProjects(req, res) {
-  try {
-    const user = req.user;
-    if (!user) {
-      return res.status(400).json(new ApiError(401, "User not found"));
-    }
-
-    const userId = user.id;
-
-    const projects = await Project.find({ projectOwner: userId });
-
-    return res
-      .status(200)
-      .json(new ApiResponse(200, projects, "Projects created by user"));
-  } catch (error) {
-    console.log("Error in getting projects", error.message);
-  }
-}
-
 async function handleGetProjectDetails(req, res) {
   try {
     // creats a map of serch queries
@@ -178,7 +159,7 @@ async function checkInvitedUser(req, res) {
   const { token } = req.query;
 
   console.log(token);
-  
+
   try {
     if (!token) {
       return res.status(500).json(new ApiError(500, "Token not found"));
@@ -205,7 +186,6 @@ async function checkInvitedUser(req, res) {
     return res
       .status(200)
       .json(new ApiResponse(200, user, "User found rediect to /"));
-
   } catch (error) {
     console.log(error);
   }
@@ -266,9 +246,8 @@ async function handleAddUserToProjectViaEmail(req, res) {
 
 export {
   handleProjectCreation,
-  handleGetProjects,
   handleGetProjectDetails,
   handleAddUserToProject,
   handleAddUserToProjectViaEmail,
-  checkInvitedUser
+  checkInvitedUser,
 };

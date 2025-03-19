@@ -17,7 +17,7 @@ function ProjectBoard() {
   const selectedIssue = searchParams.get("selectedIssue");
 
   return (
-    <div className="border-l border-gray-200 bg-white w-full relative p-6 flex-shrink-0">
+    <div className="border-l border-gray-200 bg-white w-full relative p-6">
       {selectedIssue && <IssueDetails />}
 
       <ProjectNavigator />

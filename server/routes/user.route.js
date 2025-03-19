@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  handleGetProjects,
   handleUserRegister,
   handleUserSignin,
   handleUserSignOut,
@@ -39,6 +40,7 @@ userRouter
   )
   .post(handleUserSignin);
 
-userRouter.route("/signout").get(verifyJWT, handleUserSignOut)
+userRouter.route("/signout").get(verifyJWT, handleUserSignOut);
+userRouter.route("/get-projects").get(verifyJWT, handleGetProjects);
 
 export { userRouter };

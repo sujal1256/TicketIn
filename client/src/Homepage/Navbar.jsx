@@ -10,25 +10,32 @@ import SearchBar from "./SearchBar";
 import useCheckSignedIn from "../utils/useCheckSignedIn";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { removeUser } from "../redux/userSlice";
 
 function Navbar() {
   const [searchParams] = useSearchParams();
   const project = searchParams.get("q");
-
-  const loggedInResponse = useCheckSignedIn();
+  useCheckSignedIn();
+  const user = useSelector((store) => store.user);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const dispatch = useDispatch();
 
   const toggleDropdown = () => setShowDropdown(!showDropdown);
   const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu);
 
   async function handleLogout() {
     try {
-      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/v1/user/signout",{
-        withCredentials: true,
-      });
-      localStorage.setItem("accessToken","");
-      document.cookie = `accessToken=""`
+      const response = await axios.get(
+        import.meta.env.VITE_BACKEND_URL + "/api/v1/user/signout",
+        {
+          withCredentials: true,
+        }
+      );
+      localStorage.removeItem("accessToken");
+      document.cookie = `accessToken=${null}`;
+      dispatch(removeUser());
     } catch (error) {
       console.error("Error while logging out", error);
     }
@@ -87,7 +94,7 @@ function Navbar() {
               </div>
             </div>
 
-            {loggedInResponse.userLoggedIn ? (
+            {user?.user ? (
               <div className="flex items-center space-x-4">
                 {/* Upgrade button */}
                 {project && (
@@ -108,7 +115,7 @@ function Navbar() {
                     >
                       <Avatar
                         name={
-                          loggedInResponse.user?.data?.data?.username || "User"
+                          user.user?.username || "User"
                         }
                         size="40"
                         round={true}
@@ -123,11 +130,11 @@ function Navbar() {
                     <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 z-10">
                       <div className="px-4 py-3">
                         <p className="text-sm font-medium text-gray-900">
-                          {loggedInResponse.user?.data?.data?.username ||
+                          {user?.user?.username ||
                             "User"}
                         </p>
                         <p className="text-sm text-gray-500 truncate">
-                          {loggedInResponse.user?.data?.data?.email ||
+                          {user?.user?.email ||
                             "user@example.com"}
                         </p>
                       </div>
