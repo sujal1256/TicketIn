@@ -4,6 +4,10 @@ import {
   handleUserRegister,
   handleUserSignin,
   handleUserSignOut,
+  handleForgotPassword,
+  handleVerifyOTP,
+  handleResetPassword,
+  handleCheckExistingUser,
 } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { ApiResponse } from "../utils/ApiResponse.util.js";
@@ -42,5 +46,11 @@ userRouter
 
 userRouter.route("/signout").get(verifyJWT, handleUserSignOut);
 userRouter.route("/get-projects").get(verifyJWT, handleGetProjects);
+userRouter.route("/forgot-password").post(handleForgotPassword);
+userRouter.route("/verify-otp").post(handleVerifyOTP);
+userRouter.route("/reset-password").patch(handleResetPassword);
+userRouter
+  .route("/check-existing-user")
+  .get(handleCheckExistingUser);
 
 export { userRouter };

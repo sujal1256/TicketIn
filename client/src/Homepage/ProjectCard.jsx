@@ -11,7 +11,7 @@ function ProjectCard({ project }) {
             {project.projectName}
           </h3>
           <p className="text-gray-600 mb-4 line-clamp-2">
-            {project.description || "No description available"}
+            {project.projectDescription || "No description available"}
           </p>
           <div className="flex justify-between items-center">
             <div className="flex items-center">

@@ -8,7 +8,7 @@ import { FaSearch } from "react-icons/fa";
 import Avatar from "react-avatar";
 import SearchBar from "./SearchBar";
 import useCheckSignedIn from "../utils/useCheckSignedIn";
-import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { Link, useSearchParams, useNavigate, Navigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { removeUser } from "../redux/userSlice";
@@ -21,6 +21,7 @@ function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const toggleDropdown = () => setShowDropdown(!showDropdown);
   const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu);
@@ -36,6 +37,7 @@ function Navbar() {
       localStorage.removeItem("accessToken");
       document.cookie = `accessToken=${null}`;
       dispatch(removeUser());
+      navigate("/signin")
     } catch (error) {
       console.error("Error while logging out", error);
     }

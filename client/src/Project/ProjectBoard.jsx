@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ProjectNavigator from "./ProjectNavigator";
 import BoardSearchBar from "./BoardSearchBar";
 import { FaUserPlus } from "react-icons/fa";
@@ -15,6 +15,34 @@ function ProjectBoard() {
   const [addUserMenu, setAddUserMenu] = useState(false);
   const [searchParams] = useSearchParams();
   const selectedIssue = searchParams.get("selectedIssue");
+  
+  // Create refs for the menu and button
+  const addUserMenuRef = useRef(null);
+  const addUserButtonRef = useRef(null);
+
+  // Handle outside clicks to close the menu
+  useEffect(() => {
+    function handleClickOutside(event) {
+      // Check if click was outside both the menu and the button
+      if (
+        addUserMenu && 
+        addUserMenuRef.current && 
+        !addUserMenuRef.current.contains(event.target) &&
+        addUserButtonRef.current && 
+        !addUserButtonRef.current.contains(event.target)
+      ) {
+        setAddUserMenu(false);
+      }
+    }
+
+    // Add event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    
+    // Clean up the event listener
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [addUserMenu]);
 
   return (
     <div className="border-l border-gray-200 bg-white w-full relative p-6">
@@ -34,13 +62,15 @@ function ProjectBoard() {
 
           <div className="relative">
             <button 
+              ref={addUserButtonRef}
               onClick={() => setAddUserMenu(!addUserMenu)}
               className="focus:outline-none"
+              aria-label="Add user to project"
             >
-              <FaUserPlus className="text-gray-600 hover:text-blue-600 p-2 w-10 h-10 rounded-full transition-colors duration-200 cursor-pointer" />
+              <FaUserPlus className="text-gray-600 hover:text-purple-600 p-2 w-10 h-10 rounded-full transition-colors duration-200 cursor-pointer" />
             </button>
             {addUserMenu && (
-              <div className="absolute right-0 mt-2 z-20">
+              <div ref={addUserMenuRef} className="absolute right-0 mt-2 z-20">
                 <AddUserMenu />
               </div>
             )}
@@ -52,14 +82,14 @@ function ProjectBoard() {
             <p className="text-sm text-gray-700">Group By:</p>
             <select
               name="groupBy"
-              className="bg-white border border-gray-300 rounded-md p-1 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-white border border-gray-300 rounded-md p-1 text-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
             >
               <option value="none">None</option>
               <option value="assignee">Assignee</option>
             </select>
           </div>
-          <button className="focus:outline-none">
-            <IoIosSettings className="text-gray-600 hover:text-blue-600 p-2 w-10 h-10 rounded-full transition-colors duration-200 cursor-pointer" />
+          <button className="focus:outline-none" aria-label="Settings">
+            <IoIosSettings className="text-gray-600 hover:text-purple-600 p-2 w-10 h-10 rounded-full transition-colors duration-200 cursor-pointer" />
           </button>
         </div>
       </div>

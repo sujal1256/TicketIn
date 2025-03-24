@@ -10,6 +10,9 @@ import { ToastContainer } from "react-toastify";
 import { Provider } from 'react-redux'
 import store from "./redux/store.js";
 import PricingHomePage from "./Pricing/PricingHomePage.jsx";
+import ForgotPassword from "./Signin/ForgotPassword.jsx";
+import VerifyOTP from "./Signin/VerifyOTP.jsx";
+import ResetPassword from "./Signin/ResetPassword.jsx";
 
 
 
@@ -26,6 +29,19 @@ const router = createBrowserRouter([
         path: "signin",
         element: <Signin />,
       },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "verify-otp",
+        element: <VerifyOTP />,
+      },
+      {
+        path: "reset-password",
+        element: <ResetPassword />,
+      },
+
       {
         path: "signup",
         element: <Signup />,

@@ -5,6 +5,7 @@ import { ApiResponse } from "../utils/ApiResponse.util.js";
 import nodemailer from "nodemailer";
 import { generateInvitationToken } from "../utils/constants.util.js";
 import jwt from "jsonwebtoken";
+import { handleAddUserEmail } from "../utils/mailer.js";
 
 async function handleProjectCreation(req, res) {
   // members will be only 1 the owner itself
@@ -67,7 +68,12 @@ async function handleProjectCreation(req, res) {
 async function handleGetProjectDetails(req, res) {
   try {
     // creats a map of serch queries
-    const projectId = req.query["q"];
+    const {projectId} = req.query;
+    console.log("projectId", projectId);
+    
+    if(!projectId){
+      return res.status(400).json(new ApiError(400, "Project Id is not valid"));
+    }
 
     const projectDetails = await Project.findOne({ _id: projectId }).select(
       "-_id -__v -createdAt -updatedAt"
@@ -194,8 +200,6 @@ async function handleAddUserToProjectViaEmail(req, res) {
   try {
     const { projectId, email } = req.body;
 
-    // getting the data
-
     if (!projectId || !email) {
       return res.status(400).json(new ApiError(400, "Values are not valid"));
     }
@@ -211,36 +215,15 @@ async function handleAddUserToProjectViaEmail(req, res) {
     if (!projectOwner) {
       return res.status(400).json(new ApiError(400, "Project Owner not found"));
     }
+    handleAddUserEmail(project, email, projectOwner, res).catch((err) =>
+      console.log("❌ Error in sending the mail", err.message)
+  );
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      host: "smtp.gmail.com",
-      port: 587,
-      auth: {
-        user: "msujal29012004@gmail.com",
-        pass: "xwdx jyzu gycj mdnw",
-      },
-    });
-
-    const token = generateInvitationToken(email, projectId);
-
-    const invitationLink = `http://localhost:5173/invite?token=${token}`;
-
-    const mailOptions = {
-      from: {
-        name: "Sujal Malhotra 👻",
-        address: "workwithsujal04@gmail.com", // sender address
-      },
-      to: "msujal29012004@gmail.com", // list of receivers
-      subject: "You're invited to the project!",
-      html: `<p>Hello! You’ve been invited to join the project. Click the link below to accept the invitation:</p>
-           <a href="${invitationLink}">Join Project</a>`,
-    };
-    const info = await transporter.sendMail(mailOptions);
-
-    return res.status(200).json(new ApiResponse(200, info, "Email sent"));
+    return res
+      .status(200)
+      .json(new ApiResponse(200, {}, "Email sent successfully"));
   } catch (error) {
-    console.log("Error in sending the mail", error.message);
+    console.log("❌ Error in sending the mail", error.message);
   }
 }
 

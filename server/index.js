@@ -26,7 +26,7 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL,
     allowedHeaders: ["Content-Type", "Authorization"],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     credentials: true,
   })
 );
@@ -40,7 +40,7 @@ app.use(cookieParser());
 app.route("/invite").get(checkInvitedUser);
 
 app.use("/api/v1/user", userRouter);
-app.use("/api/v1/project", verifyJWT, projectRouter);
+app.use("/api/v1/project", projectRouter);
 app.use("/api/v1/issue", verifyJWT, issueRouter);
 
 app.listen(PORT, () => {
